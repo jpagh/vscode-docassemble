@@ -1,0 +1,19 @@
+{
+  "scopeName": "jinja.injection",
+  "injectionSelector": "L:source.yaml",
+  "patterns": [
+    {
+      "include": "#jinja-all"
+    }
+  ],
+  "repository": {
+    "jinja-all": {
+      "match": "",
+      "patterns": [
+        {
+          "include": "source.jinja"
+        }
+      ]
+    }
+  }
+}

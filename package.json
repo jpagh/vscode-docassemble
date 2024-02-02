@@ -1,10 +1,9 @@
 {
-    "name": "inline-yaml",
-    "displayName": "Inline YAML Syntax Highlighting",
-    "description": "Javascript/Typescript YAML Template Literal Syntax Highlighting  🙌",
-    "version": "1.1.1",
-    "icon": "yaml-icon.png",
-    "publisher": "monotykamary",
+    "name": "vscode-docassemble",
+    "displayName": "Docassemble YAML Syntax Highlighting",
+    "description": "Syntax Highlighting for Docassemble YAML",
+    "version": "0.0.1",
+    "publisher": "jpagh",
     "engines": {
         "vscode": "^1.40.0"
     },
@@ -13,22 +12,32 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/monotykamary/inline-yaml"
+        "url": "https://github.com/jpagh/vscode-docassemble"
     },
     "contributes": {
         "grammars": [
             {
-                "injectTo": [
-                    "source.js",
-                    "source.ts",
-                    "source.jsx",
-                    "source.tsx",
-                    "source.go"
-                ],
-                "scopeName": "inline.yaml",
-                "path": "./syntaxes/inline-yaml.json",
+                "injectTo": ["source.yaml"],
+                "scopeName": "python.injection",
+                "path": "./syntaxes/python-injection.json",
                 "embeddedLanguages": {
-                    "meta.embedded.block.yaml": "yaml"
+                    "python": "python"
+                }
+            },
+            {
+                "injectTo": ["source.yaml"],
+                "scopeName": "mako.injection",
+                "path": "./syntaxes/mako-injection.json",
+                "embeddedLanguages": {
+                    "mako": "mako"
+                }
+            },
+            {
+                "injectTo": ["source.yaml"],
+                "scopeName": "jinja.injection",
+                "path": "./syntaxes/jinja-injection.json",
+                "embeddedLanguages": {
+                    "jinja": "jinja"
                 }
             }
         ]

@@ -1,0 +1,79 @@
+---
+{% set jinja_documents_available = ({
+
+  "basics" : 9,
+  "landlord" : [item for item in list],
+  "quickdocs" : variable,
+  "z_testing" : "Z Testing",
+  
+  }) %}
+---
+{{ test.method() }}
+---
+question: Proposed Judgment
+subquestion: |
+  Your favorite fruit is ${ favorite_fruit }.
+  
+  % if favorite_fruit == 'Apple':
+  Your favorite apple is ${ favorite_apple }.
+  % endif
+fields:
+  - Are the costs taxed?: landlord.costs_taxed_yn
+    datatype: yesnoradio
+  - To who?: landlord.costs_taxed_who
+    choices:
+      - ${p0.kind}
+      - ${p1.kind}
+    input type: radio
+    show if: landlord.costs_taxed_yn
+---
+code: |
+  landlord.award_total_amt = landlord.award_damages_amt + landlord.award_attorney_amt
+---
+question: Special Process Server Organization
+fields:
+  - Name: landlord.sps.org.name.text
+    input type: combobox
+    code: |
+      sps_dict.keys()
+    hint: Select one or write in your response.
+---
+code: |
+  sps_dict = {
+    "Litigation Services, LLC": {
+      "address": 
+        {
+          "address": 19.09,
+          "city": False,
+          "state": [item.attribute.method() for item in list],
+        },
+      "members": [
+        {
+          "first": "John",
+          "last": "Doe",
+          "gender": "male",
+        },
+        {
+          "first": "Jane",
+          "last": "Doe",
+          "gender": "female",
+        },
+        ]
+      },
+    }
+---
+code: |
+  if landlord.sps.org.name.text in sps_dict.keys():
+    for item in sps_dict[landlord.sps.org.name.text]["members"]:
+      landlord.sps.appendObject(Individual)
+      landlord.sps[-1].name.first = item.get("first", "")
+      landlord.sps[-1].name.middle = item.get("middle", "")
+      landlord.sps[-1].name.last = item.get("last", "")
+      landlord.sps[-1].gender = item.get("gender", "")
+    landlord.sps.there_is_another = False
+    landlord.sps.gathered = True
+  else:
+    landlord.sps.auto_gather = True
+    landlord.sps.there_are_any = True
+    landlord.sps.gather()
+---

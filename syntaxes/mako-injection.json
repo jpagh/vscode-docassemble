@@ -1,0 +1,19 @@
+{
+  "scopeName": "mako.injection",
+  "injectionSelector": "L:source.yaml",
+  "patterns": [
+    {
+      "include": "#mako-all"
+    }
+  ],
+  "repository": {
+    "mako-all": {
+      "match": "",
+      "patterns": [
+        {
+          "include": "text.html.mako"
+        }
+      ]
+    }
+  }
+}
