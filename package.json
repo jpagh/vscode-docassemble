@@ -1,44 +1,93 @@
 {
     "name": "vscode-docassemble",
-    "displayName": "Docassemble YAML Syntax Highlighting",
-    "description": "Syntax Highlighting for Docassemble YAML",
+    "displayName": "Docassemble YAML",
+    "description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
     "version": "0.0.1",
     "publisher": "jpagh",
+    "author": "Jack Adamson",
     "engines": {
         "vscode": "^1.40.0"
     },
     "categories": [
         "Programming Languages"
     ],
+    "keywords": [
+		"docassemble",
+		"yaml"
+	],
     "repository": {
         "type": "git",
         "url": "https://github.com/jpagh/vscode-docassemble"
     },
     "contributes": {
-        "grammars": [
+		"languages": [
+            {
+                "id": "docassemble",
+                "aliases": [
+                    "Docassemble YAML",
+                    "docassemble-yaml"
+                ],
+                "extensions": [
+                    ".yml"
+                ],
+                "configuration": "./language-configuration/language-configuration-yaml.json"
+            },
+            {
+				"id": "mako",
+				"aliases": [
+					"Mako",
+					"mako"
+				],
+				"extensions": [],
+				"configuration": "./language-configuration/language-configuration-mako.json"
+			},
+			{
+				"id": "jinja",
+				"aliases": [
+					"Jinja",
+                    "jinja"
+				],
+				"extensions": [],
+				"configuration": "./language-configuration/language-configuration-jinja.json"
+			}
+		],
+		"grammars": [
+            {
+				"language": "docassemble",
+				"scopeName": "source.yaml",
+				"path": "./syntaxes/YAML.tmLanguage.json"
+			},
+			{
+                "language": "jinja",
+				"scopeName": "source.jinja",
+				"path": "./syntaxes/jinja.tmLanguage.json"
+			},
+            {
+                "language": "mako",
+				"scopeName": "source.mako",
+				"path": "./syntaxes/mako.tmLanguage.json"
+			},
             {
                 "injectTo": ["source.yaml"],
                 "scopeName": "python.injection",
-                "path": "./syntaxes/python-injection.json",
-                "embeddedLanguages": {
-                    "python": "python"
-                }
+                "path": "./syntaxes/python-injection.json"
             },
             {
                 "injectTo": ["source.yaml"],
                 "scopeName": "mako.injection",
-                "path": "./syntaxes/mako-injection.json",
-                "embeddedLanguages": {
-                    "mako": "mako"
-                }
+                "path": "./syntaxes/mako-injection.json"
             },
             {
                 "injectTo": ["source.yaml"],
                 "scopeName": "jinja.injection",
-                "path": "./syntaxes/jinja-injection.json",
-                "embeddedLanguages": {
-                    "jinja": "jinja"
-                }
+                "path": "./syntaxes/jinja-injection.json"
+            }
+        ],
+        "snippets": [
+            {
+              "language": "mako",
+              "scopeName": "source.mako",
+              "path": "./snippets/mako-snippets.json"
             }
         ]
     },
