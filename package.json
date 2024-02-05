@@ -3,7 +3,7 @@
     "displayName": "Docassemble YAML",
     "description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
     "version": "0.0.1",
-    "publisher": "jpagh",
+    "publisher": "jackadamson",
     "author": "Jack Adamson",
     "engines": {
         "vscode": "^1.40.0"
