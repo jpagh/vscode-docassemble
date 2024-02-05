@@ -1,3 +1,5 @@
 # Docassemble YAML Syntax Highlighting
 
-Provides basic syntax highlighting of YAML, Jinja, Mako, and Python through grammar injection for Docassemble YAML files.
+Provides basic syntax highlighting of [Docassemble](https://docassemble.org/) YAML files that have incorporated Python, Mako, and/or Jinja code.
+
+![yaml](https://raw.githubusercontent.com/jpagh/vscode-docassemble/demo.png)

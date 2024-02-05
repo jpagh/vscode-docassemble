@@ -1,38 +1,38 @@
 {
-    "name": "vscode-docassemble",
-    "displayName": "Docassemble YAML",
-    "description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
-    "version": "0.0.1",
-    "publisher": "jackadamson",
-    "author": "Jack Adamson",
-    "engines": {
-        "vscode": "^1.40.0"
-    },
-    "categories": [
-        "Programming Languages"
-    ],
-    "keywords": [
+	"name": "vscode-docassemble",
+	"displayName": "Docassemble YAML",
+	"description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
+	"version": "0.0.1",
+	"publisher": "jackadamson",
+	"author": "Jack Adamson",
+	"engines": {
+		"vscode": "^1.40.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
 		"docassemble",
 		"yaml"
 	],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jpagh/vscode-docassemble"
-    },
-    "contributes": {
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jpagh/vscode-docassemble"
+	},
+	"contributes": {
 		"languages": [
-            {
-                "id": "docassemble",
-                "aliases": [
-                    "Docassemble YAML",
-                    "docassemble-yaml"
-                ],
-                "extensions": [
-                    ".yml"
-                ],
-                "configuration": "./language-configuration/language-configuration-yaml.json"
-            },
-            {
+			{
+				"id": "docassemble",
+				"aliases": [
+					"Docassemble YAML",
+					"docassemble-yaml"
+				],
+				"extensions": [
+					".yml"
+				],
+				"configuration": "./language-configuration/language-configuration-yaml.json"
+			},
+			{
 				"id": "mako",
 				"aliases": [
 					"Mako",
@@ -45,56 +45,73 @@
 				"id": "jinja",
 				"aliases": [
 					"Jinja",
-                    "jinja"
+					"jinja"
 				],
 				"extensions": [],
 				"configuration": "./language-configuration/language-configuration-jinja.json"
 			}
 		],
 		"grammars": [
-            {
+			{
 				"language": "docassemble",
 				"scopeName": "source.yaml",
 				"path": "./syntaxes/YAML.tmLanguage.json"
 			},
 			{
-                "language": "jinja",
+				"language": "jinja",
 				"scopeName": "source.jinja",
 				"path": "./syntaxes/jinja.tmLanguage.json"
 			},
-            {
-                "language": "mako",
+			{
+				"language": "mako",
 				"scopeName": "source.mako",
 				"path": "./syntaxes/mako.tmLanguage.json"
 			},
-            {
-                "injectTo": ["source.yaml"],
-                "scopeName": "python.injection",
-                "path": "./syntaxes/python-injection.json"
-            },
-            {
-                "injectTo": ["source.yaml"],
-                "scopeName": "mako.injection",
-                "path": "./syntaxes/mako-injection.json"
-            },
-            {
-                "injectTo": ["source.yaml"],
-                "scopeName": "jinja.injection",
-                "path": "./syntaxes/jinja-injection.json"
-            }
-        ],
-        "snippets": [
-            {
-              "language": "mako",
-              "scopeName": "source.mako",
-              "path": "./snippets/mako-snippets.json"
-            }
-        ]
-    },
-    "devDependencies": {
-        "@commitlint/cli": "^11.0.0",
-        "@commitlint/config-conventional": "^11.0.0",
-        "husky": "^4.3.0",
-        "standard-version": "^9.0.0"
-    }
+			{
+				"injectTo": [
+					"source.yaml"
+				],
+				"scopeName": "python.injection",
+				"path": "./syntaxes/python-injection.json"
+			},
+			{
+				"injectTo": [
+					"source.yaml"
+				],
+				"scopeName": "mako.injection",
+				"path": "./syntaxes/mako-injection.json"
+			},
+			{
+				"injectTo": [
+					"source.yaml"
+				],
+				"scopeName": "jinja.injection",
+				"path": "./syntaxes/jinja-injection.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "mako",
+				"scopeName": "source.mako",
+				"path": "./snippets/mako-snippets.json"
+			}
+		]
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^11.0.0",
+		"@commitlint/config-conventional": "^11.0.0",
+		"husky": "^4.3.0",
+		"standard-version": "^9.0.0"
+	},
+	"__metadata": {
+		"id": "517a3d61-d626-45e9-a011-03be13277f9a",
+		"publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
+		"publisherDisplayName": "Jack Adamson",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1707172694885,
+		"pinned": false
+	}
 }
