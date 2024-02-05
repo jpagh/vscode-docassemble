@@ -2,7 +2,7 @@
 	"name": "vscode-docassemble",
 	"displayName": "Docassemble YAML",
 	"description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
-	"version": "0.0.1",
+	"version": "0.0.4",
 	"publisher": "jackadamson",
 	"author": "Jack Adamson",
 	"engines": {
@@ -87,13 +87,6 @@
 				],
 				"scopeName": "jinja.injection",
 				"path": "./syntaxes/jinja-injection.json"
-			}
-		],
-		"snippets": [
-			{
-				"language": "mako",
-				"scopeName": "source.mako",
-				"path": "./snippets/mako-snippets.json"
 			}
 		]
 	},
