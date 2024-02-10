@@ -9,7 +9,7 @@
   "repository": {
     "code": {
       "begin": "(?<=^[\\s]*\\bcode:)",
-      "end": "(?=---|\\b\\w*: )",
+      "end": "(?=---|\\b\\w*:\\S)",
       "patterns": [
         {
           "include": "source.python"
