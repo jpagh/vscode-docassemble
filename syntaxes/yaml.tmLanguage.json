@@ -503,27 +503,6 @@
 				}
 			]
 		},
-		"flow-scalar-single-quoted": {
-			"begin": "'",
-			"beginCaptures": {
-				"0": {
-					"name": "punctuation.definition.string.begin.yaml"
-				}
-			},
-			"end": "'(?!')",
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.definition.string.end.yaml"
-				}
-			},
-			"name": "string.quoted.single.yaml",
-			"patterns": [
-				{
-					"match": "''",
-					"name": "constant.character.escape.single-quoted.yaml"
-				}
-			]
-		},
 		"flow-sequence": {
 			"begin": "\\[",
 			"beginCaptures": {
