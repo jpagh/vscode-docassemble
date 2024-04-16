@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 0.3.0 (2023-04-16)
+Changed YAML highlighting of boolean values to match the interpretation of Docassemble. This removed all variations of "Yes|No|On|Off" from being highlighted as boolean values and leaves only "true|True|TRUE|false|False|FALSE".
+
 ## 0.2.0 (2023-02-27)
 Missed some updates from version 0.0.1 through 0.0.7, and then accidentally updated version to 0.2.0, and then missed including the changelog to that version as well. So this is being backfilled.
 
