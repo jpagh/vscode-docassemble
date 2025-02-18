@@ -1,6 +1,6 @@
 {
   "scopeName": "mako.injection",
-  "injectionSelector": "L:source.yaml -comment",
+  "injectionSelector": "R:source.yaml -comment",
   "patterns": [
     {
       "include": "source.mako"
