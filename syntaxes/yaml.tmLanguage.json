@@ -577,7 +577,7 @@
 					"match": "\\G((&))([^\\s\\[\\]/{/},]+)(\\S+)?"
 				},
 				{
-					"match": "(?x)\n                        \\G\n                        (?:\n                            ! < (?: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]] )+ >\n                          | (?:!(?:[0-9A-Za-z\\-]*!)?) (?: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$_.~*'()] )+\n                          | !\n                        )\n                        (?=\\ |\\t|$)\n                    ",
+					"match": "(?x)\n                        \\G\n                        (?:\n                            ! < (?: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]] )+ >\n                          | (?:!(?:[0-9A-Za-z\\-]*!)?) (?: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()] )+\n                          | !\n                        )\n                        (?=\\ |\\t|$)\n                    ",
 					"name": "storage.type.tag-handle.yaml"
 				},
 				{
@@ -593,6 +593,19 @@
 				},
 				{
 					"include": "#property"
+				},
+				{
+					"begin": "(?=.*:)(\\$\\{)",
+					"captures": {
+						"1": { "name": "keyword.control" }
+					},
+					"end": "(\\})",
+					"name": "unquoted.plain.out.yaml entity.name.tag.yaml source.mako.expression",
+					"patterns": [
+						{
+							"include": "source.python"
+						}
+					]
 				}
 			]
 		}
