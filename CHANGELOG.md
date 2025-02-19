@@ -1,6 +1,13 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+## 0.3.3 (2025-02-18)
+Updated this CHANGELOG since I missed it in the process of trying to get this thing published.
+
+## 0.3.2 (2025-02-18)
+Fixed an issue with node modules being included in the extension package. Cleaned up a lot of other dependencies and garbage.
+
+## 0.3.1 (2025-02-18)
+Improved syntax highlighting: Python `code` blocks now terminate on sub-keys (fixes 0.2.0's outstanding issue), HTML terminates more consistently overall, and Mako expressions as keys in YAML key-pairs properly inherit the highlighting of the YAML key and retain otherwise proper Mako highlighting.
 
 ## 0.3.0 (2023-04-16)
 Changed YAML highlighting of boolean values to match the interpretation of Docassemble. This removed all variations of "Yes|No|On|Off" from being highlighted as boolean values and leaves only "true|True|TRUE|false|False|FALSE".
