@@ -102,8 +102,5 @@
 		"hasPreReleaseVersion": false,
 		"installedTimestamp": 1707172694885,
 		"pinned": false
-	},
-	"dependencies": {
-		"@vscode/vsce": "^3.2.2"
 	}
 }
