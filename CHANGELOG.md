@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.3.3 (2025-02-18)
-Updated this CHANGELOG since I missed it in the process of trying to get this thing published.
+Updated the demo image to show more variety and updated this CHANGELOG since I missed it before.
 
 ## 0.3.2 (2025-02-18)
 Fixed an issue with node modules being included in the extension package. Cleaned up a lot of other dependencies and garbage.
