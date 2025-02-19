@@ -92,12 +92,6 @@
 			}
 		]
 	},
-	"devDependencies": {
-		"@commitlint/cli": "^19.7.1",
-		"@commitlint/config-conventional": "^19.7.1",
-		"husky": "^9.1.7",
-		"standard-version": "^9.0.0"
-	},
 	"__metadata": {
 		"id": "517a3d61-d626-45e9-a011-03be13277f9a",
 		"publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
@@ -108,5 +102,8 @@
 		"hasPreReleaseVersion": false,
 		"installedTimestamp": 1707172694885,
 		"pinned": false
+	},
+	"dependencies": {
+		"@vscode/vsce": "^3.2.2"
 	}
 }
