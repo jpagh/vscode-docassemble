@@ -3,11 +3,19 @@
   "injectionSelector": "L:source.yaml",
   "patterns": [
     {
-      "include": "#code"
-    }
-  ],
-  "repository": {
-    "code": {
+      "begin": "^[\\s]*(if)(:)\\s(?=.*$)",
+      "end": "$",
+      "beginCaptures": {
+        "1": { "name": "entity.name.tag.yaml" },
+        "2": { "name": "punctuation.separator.key-value.mapping.yaml" }
+      },
+      "patterns": [
+        {
+          "include": "source.python"
+        }
+      ]
+    },
+    {
       "begin": "(?<=^[\\s]*\\bcode:)",
       "end": "(?=---|-?[ ]*[^:]*:[ ]*[\\w])",
       "patterns": [
@@ -15,6 +23,15 @@
           "include": "source.python"
         }
       ]
+    },
+    {
+      "begin": "(?<=[\\w]\\.using\\()",
+      "end": "(?=\\))",
+      "patterns": [
+        {
+          "include": "source.python"
+        }
+      ]
     }
-  }
+  ]
 }

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.4 (2025-02-19)
+Added Python highlighting to all blocks' `if: ` expression and (imperfectly) to `objects` blocks' `using()` method.
+
 ## 0.3.3 (2025-02-18)
 Updated the demo image to show more variety and updated this CHANGELOG since I missed it before.
 
