@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.3.5 (2025-02-22)
-Fixed Mako and HTML highlighting for the first line of multiline YAML (`|`).
+Fixed Mako and HTML highlighting on the first line of multiline YAML (`|`). Fixed some inconsistencies with the `.using()` method's highlighting.
 
 ## 0.3.4 (2025-02-19)
 Added Python highlighting to all blocks' `if: ` expression and (imperfectly) to `objects` blocks' `using()` method.
