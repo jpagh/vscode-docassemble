@@ -16,7 +16,7 @@
       ]
     },
     {
-      "begin": "(?<=^[\\s]*\\bcode:)",
+      "begin": "(?<=^[\\s]*(validation )?\\bcode:)",
       "end": "(?=---|-?[ ]*[^:]*:[ ]*[\\w])",
       "patterns": [
         {
