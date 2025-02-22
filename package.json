@@ -89,13 +89,6 @@
 				],
 				"scopeName": "jinja.injection",
 				"path": "./syntaxes/jinja-injection.json"
-			},
-			{
-				"injectTo": [
-					"source.yaml"
-				],
-				"scopeName": "mako.inline.injection",
-				"path": "./syntaxes/mako-inline-injection.json"
 			}
 		]
 	},
