@@ -1,6 +1,6 @@
 {
   "scopeName": "python.injection",
-  "injectionSelector": "L:source.yaml",
+  "injectionSelector": "L:source.yaml -comment",
   "patterns": [
     {
       "begin": "^[\\s]*(if)(:)\\s(?=.*$)",
@@ -25,8 +25,8 @@
       ]
     },
     {
-      "begin": "(?<=[\\w]\\.using\\()",
-      "end": "(?=\\))",
+      "begin": "(\\.using\\()",
+      "end": "(\\))",
       "patterns": [
         {
           "include": "source.python"
