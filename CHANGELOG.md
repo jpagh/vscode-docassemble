@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.6 (2025-02-22)
+Removed unused syntax injection.
+
 ## 0.3.5 (2025-02-22)
 Fixed Mako and HTML highlighting on the first line of multiline YAML (`|`). Fixed some inconsistencies with the `.using()` method's highlighting.
 
