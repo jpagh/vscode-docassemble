@@ -1,0 +1,9 @@
+{
+  "scopeName": "mako.inline.injection",
+  "injectionSelector": "R:source.yaml -string.unquoted.yaml -comment",
+  "patterns": [
+    {
+      "include": "source.mako"
+    }
+  ]
+}
