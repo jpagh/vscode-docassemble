@@ -149,7 +149,7 @@
 				{
 					"begin": "^([ ]+)(?! )",
 					"end": "^(?!\\1|\\s*$)",
-					"name": "unquoted.block.yaml"
+					"include": "source.mako"
 				}
 			]
 		},
@@ -469,7 +469,7 @@
 				{
 					"begin": "(?x)\n                          [^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]\n                        | [?:-] \\S\n                    ",
 					"end": "(?x)\n                        (?=\n                              \\s* $\n                            | \\s+ \\#\n                            | \\s* : (\\s|$)\n                        )\n                    ",
-					"name": "unquoted.plain.out.yaml"
+					"include": "source.mako"
 				}
 			]
 		},
