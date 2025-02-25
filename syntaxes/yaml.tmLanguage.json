@@ -29,6 +29,42 @@
 			"include": "#node"
 		}
 	],
+	"block-scalar": {
+		"begin": "(?:(\\|)|(>))([1-9])?([-+])?(.*\\n?)",
+		"beginCaptures": {
+			"1": {
+				"name": "keyword.control.flow.block-scalar.literal.yaml"
+			},
+			"2": {
+				"name": "keyword.control.flow.block-scalar.folded.yaml"
+			},
+			"3": {
+				"name": "constant.numeric.indentation-indicator.yaml"
+			},
+			"4": {
+				"name": "storage.modifier.chomping-indicator.yaml"
+			},
+			"5": {
+				"patterns": [
+					{
+						"include": "#comment"
+					},
+					{
+						"match": ".+",
+						"name": "invalid.illegal.expected-comment-or-newline.yaml"
+					}
+				]
+			}
+		},
+		"end": "^(?=\\S)|(?!\\G)",
+		"patterns": [
+			{
+				"begin": "^([ ]+)(?! )",
+				"end": "^(?!\\1|\\s*$)",
+				"include": "source.mako"
+			}
+		]
+	},
 	"repository": {
 		"block-collection": {
 			"patterns": [
@@ -92,21 +128,21 @@
 					]
 				},
 				{
-					"begin": "(?x)\n                        (?=\n                            (?x:\n                                  [^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]\n                                | [?:-] \\S\n                            )\n                            (\n                                  [^\\s:]\n                                | : \\S\n                                | \\s+ (?![#\\s])\n                            )*\n                            \\s*\n                            :\n\t\t\t\t\t\t\t(\\s|$)\n                        )\n                    ",
-					"end": "(?x)\n                        (?=\n                              \\s* $\n                            | \\s+ \\#\n                            | \\s* : (\\s|$)\n                        )\n                    ",
+					"begin": "(?x)(?=(?x:[^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]|[?:-]\\S)([^\\s:]|:\\S|\\s+(?![#\\s]))*\\s*:(\\s|$))",
+					"end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$))",
 					"patterns": [
 						{
 							"include": "#flow-scalar-plain-out-implicit-type"
 						},
 						{
-							"begin": "(?x)\n                                  [^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]\n                                | [?:-] \\S\n                            ",
+							"begin": "(?x)([^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]|[?:-]\\S)",
 							"beginCaptures": {
 								"0": {
 									"name": "entity.name.tag.yaml"
 								}
 							},
 							"contentName": "entity.name.tag.yaml",
-							"end": "(?x)\n                                (?=\n                                      \\s* $\n                                    | \\s+ \\#\n                                    | \\s* : (\\s|$)\n                                )\n                            ",
+							"end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$))",
 							"name": "unquoted.plain.out.yaml"
 						}
 					]
@@ -114,42 +150,6 @@
 				{
 					"match": ":(?=\\s|$)",
 					"name": "punctuation.separator.key-value.mapping.yaml"
-				}
-			]
-		},
-		"block-scalar": {
-			"begin": "(?:(\\|)|(>))([1-9])?([-+])?(.*\\n?)",
-			"beginCaptures": {
-				"1": {
-					"name": "keyword.control.flow.block-scalar.literal.yaml"
-				},
-				"2": {
-					"name": "keyword.control.flow.block-scalar.folded.yaml"
-				},
-				"3": {
-					"name": "constant.numeric.indentation-indicator.yaml"
-				},
-				"4": {
-					"name": "storage.modifier.chomping-indicator.yaml"
-				},
-				"5": {
-					"patterns": [
-						{
-							"include": "#comment"
-						},
-						{
-							"match": ".+",
-							"name": "invalid.illegal.expected-comment-or-newline.yaml"
-						}
-					]
-				}
-			},
-			"end": "^(?=\\S)|(?!\\G)",
-			"patterns": [
-				{
-					"begin": "^([ ]+)(?! )",
-					"end": "^(?!\\1|\\s*$)",
-					"include": "source.mako"
 				}
 			]
 		},
@@ -211,7 +211,7 @@
 							"name": "support.type.tag-prefix.yaml"
 						}
 					},
-					"match": "(?x)\n                        \\G\n                        (TAG)\n                        (?:[ \\t]+\n                            ((?:!(?:[0-9A-Za-z\\-]*!)?))\n                            (?:[ \\t]+ (\n                                  !              (?x: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]] )*\n                                | (?![,!\\[\\]{}]) (?x: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]] )+\n                                )\n                            )?\n                        )?\n                    "
+					"match": "(?x)\\G(TAG)(?:[ \\t]+((?:!(?:[0-9A-Za-z\\-]*!)?))?(?:[ \\t]+(!(?x:%[0-9A-Fa-f]{2}|[0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]])*|(?![,!\\[\\]{}])(?x:%[0-9A-Fa-f]{2}|[0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]])+))?)?"
 				},
 				{
 					"captures": {
@@ -225,7 +225,7 @@
 							"name": "unquoted.directive-parameter.yaml"
 						}
 					},
-					"match": "(?x) \\G (\\w+) (?:[ \\t]+ (\\w+) (?:[ \\t]+ (\\w+))? )?"
+					"match": "(?x)\\G(\\w+)(?:[ \\t]+(\\w+)(?:[ \\t]+(\\w+))?)?"
 				},
 				{
 					"match": "\\S+",
@@ -341,22 +341,22 @@
 					]
 				},
 				{
-					"begin": "(?x)\n                        (?=\n                            (?:\n                                [^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]\n                              | [?:-] [^\\s[\\[\\]{},]]\n                            )\n                            (\n                                  [^\\s:[\\[\\]{},]]\n                                | : [^\\s[\\[\\]{},]]\n                                | \\s+ (?![#\\s])\n                            )*\n                            \\s*\n                            :\n\t\t\t\t\t\t\t(\\s|$)\n                        )\n                    ",
-					"end": "(?x)\n                        (?=\n                              \\s* $\n                            | \\s+ \\#\n                            | \\s* : (\\s|$)\n                            | \\s* : [\\[\\]{},]\n                            | \\s* [\\[\\]{},]\n                        )\n                    ",
+					"begin": "(?x)(?=(?:[^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]|[?:-][^\\s[\\[\\]{},]])([^\\s:[\\[\\]{},]]|:[^\\s[\\[\\]{},]]|\\s+(?![#\\s]))*\\s*:(\\s|$))",
+					"end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},])",
 					"name": "meta.flow-pair.key.yaml",
 					"patterns": [
 						{
 							"include": "#flow-scalar-plain-in-implicit-type"
 						},
 						{
-							"begin": "(?x)\n                                  [^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]\n                                | [?:-] [^\\s[\\[\\]\\${},]]\n                            ",
+							"begin": "(?x)([^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]|[?:-][^\\s[\\[\\]\\${},]])",
 							"beginCaptures": {
 								"0": {
 									"name": "entity.name.tag.yaml"
 								}
 							},
 							"contentName": "entity.name.tag.yaml",
-							"end": "(?x)\n                                (?=\n                                      \\s* $\n                                    | \\s+ \\#\n                                    | \\s* : (\\s|$)\n                                    | \\s* : [\\[\\]{},]\n                                    | \\s* [\\[\\]{},]\n                                )\n                            ",
+							"end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},])",
 							"name": "unquoted.plain.in.yaml"
 						}
 					]
@@ -425,8 +425,8 @@
 					"include": "#flow-scalar-plain-in-implicit-type"
 				},
 				{
-					"begin": "(?x)\n                          [^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]\n                        | [?:-] [^\\s[\\[\\]{},]]\n                    ",
-					"end": "(?x)\n                        (?=\n                              \\s* $\n                            | \\s+ \\#\n                            | \\s* : (\\s|$)\n                            | \\s* : [\\[\\]{},]\n                            | \\s* [\\[\\]{},]\n                        )\n                    ",
+					"begin": "(?x)[^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]|[?:-][^\\s[\\[\\]{},]]",
+					"end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},])",
 					"name": "unquoted.plain.in.yaml"
 				}
 			]
@@ -457,7 +457,7 @@
 							"name": "constant.language.merge.yaml"
 						}
 					},
-					"match": "(?x)\n                        (?x:\n                              (null|Null|NULL|~)\n                            | (true|True|TRUE|false|False|FALSE)\n                            | (\n                                (?:\n                                      [-+]? 0b [0-1_]+ # (base 2)\n                                    | [-+]? 0  [0-7_]+ # (base 8)\n                                    | [-+]? (?: 0|[1-9][0-9_]*) # (base 10)\n                                    | [-+]? 0x [0-9a-fA-F_]+ # (base 16)\n                                    | [-+]? [1-9] [0-9_]* (?: :[0-5]?[0-9])+ # (base 60)\n                                )\n                              )\n                            | (\n                                (?x:\n                                      [-+]? (?: [0-9] [0-9_]*)? \\. [0-9.]* (?: [eE] [-+] [0-9]+)? # (base 10)\n                                    | [-+]? [0-9] [0-9_]* (?: :[0-5]?[0-9])+ \\. [0-9_]* # (base 60)\n                                    | [-+]? \\. (?: inf|Inf|INF) # (infinity)\n                                    |       \\. (?: nan|NaN|NAN) # (not a number)\n                                )\n                              )\n                            | (\n                                (?x:\n                                    \\d{4} - \\d{2} - \\d{2}           # (y-m-d)\n                                  | \\d{4}                           # (year)\n                                    - \\d{1,2}                       # (month)\n                                    - \\d{1,2}                       # (day)\n                                    (?: [Tt] | [ \\t]+) \\d{1,2}      # (hour)\n                                    : \\d{2}                         # (minute)\n                                    : \\d{2}                         # (second)\n                                    (?: \\.\\d*)?                     # (fraction)\n                                    (?:\n                                          (?:[ \\t]*) Z\n                                        | [-+] \\d{1,2} (?: :\\d{1,2})?\n                                    )?                              # (time zone)\n                                )\n                              )\n                            | (=)\n                            | (<<)\n                        )\n                        (?:\n                            (?=\n                                  \\s* $\n                                | \\s+ \\#\n                                | \\s* : (\\s|$)\n                                | \\s* : [\\[\\]{},]\n                                | \\s* [\\[\\]{},]\n                            )\n                        )\n                    "
+					"match": "(?x)(?x:(None)|(True|False)|((?:[-+]?0b[0-1_]+|[-+]?0[0-7_]+|[-+]?(?:0|[1-9][0-9_]*)|[-+]?0x[0-9a-fA-F_]+|[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+))|((?x:[-+]?(?:[0-9][0-9_]*)?\\.[0-9.]*(?:[eE][-+][0-9]+)?|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\\.[0-9_]*))|((?x:\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{1,2}-\\d{1,2}(?:[Tt]|[ \\t]+)\\d{1,2}:\\d{2}:\\d{2}(?:\\.\\d*)?(?:(?:[ \\t]*)Z|[-+]\\d{1,2}(?::\\d{1,2})?)?))|(=)|(<<))(?:(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},]))"
 				}
 			]
 		},
@@ -467,8 +467,8 @@
 					"include": "#flow-scalar-plain-out-implicit-type"
 				},
 				{
-					"begin": "(?x)\n                          [^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]\n                        | [?:-] \\S\n                    ",
-					"end": "(?x)\n                        (?=\n                              \\s* $\n                            | \\s+ \\#\n                            | \\s* : (\\s|$)\n                        )\n                    ",
+					"begin": "(?x)[^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]|[?:-]\\S",
+					"end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$))",
 					"include": "source.mako"
 				}
 			]
@@ -499,7 +499,7 @@
 							"name": "constant.language.merge.yaml"
 						}
 					},
-					"match": "(?x)\n                        (?x:\n                              (null|Null|NULL|~)\n                            | (true|True|TRUE|false|False|FALSE)\n                            | (\n                                (?:\n                                      [-+]? 0b [0-1_]+ # (base 2)\n                                    | [-+]? 0  [0-7_]+ # (base 8)\n                                    | [-+]? (?: 0|[1-9][0-9_]*) # (base 10)\n                                    | [-+]? 0x [0-9a-fA-F_]+ # (base 16)\n                                    | [-+]? [1-9] [0-9_]* (?: :[0-5]?[0-9])+ # (base 60)\n                                )\n                              )\n                            | (\n                                (?x:\n                                      [-+]? (?: [0-9] [0-9_]*)? \\. [0-9.]* (?: [eE] [-+] [0-9]+)? # (base 10)\n                                    | [-+]? [0-9] [0-9_]* (?: :[0-5]?[0-9])+ \\. [0-9_]* # (base 60)\n                                    | [-+]? \\. (?: inf|Inf|INF) # (infinity)\n                                    |       \\. (?: nan|NaN|NAN) # (not a number)\n                                )\n                              )\n                            | (\n                                (?x:\n                                    \\d{4} - \\d{2} - \\d{2}           # (y-m-d)\n                                  | \\d{4}                           # (year)\n                                    - \\d{1,2}                       # (month)\n                                    - \\d{1,2}                       # (day)\n                                    (?: [Tt] | [ \\t]+) \\d{1,2}      # (hour)\n                                    : \\d{2}                         # (minute)\n                                    : \\d{2}                         # (second)\n                                    (?: \\.\\d*)?                     # (fraction)\n                                    (?:\n                                          (?:[ \\t]*) Z\n                                        | [-+] \\d{1,2} (?: :\\d{1,2})?\n                                    )?                              # (time zone)\n                                )\n                              )\n                            | (=)\n                            | (<<)\n                        )\n                        (?x:\n                            (?=\n                                  \\s* $\n                                | \\s+ \\#\n                                | \\s* : (\\s|$)\n                            )\n                        )\n                    "
+					"match": "(?x)(?x:(None)|(True|False)|((?:[-+]?0b[0-1_]+|[-+]?0[0-7_]+|[-+]?(?:0|[1-9][0-9_]*)|[-+]?0x[0-9a-fA-F_]+|[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+))|((?x:[-+]?(?:[0-9][0-9_]*)?\\.[0-9.]*(?:[eE][-+][0-9]+)?|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\\.[0-9_]*))|((?x:\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{1,2}-\\d{1,2}(?:[Tt]|[ \\t]+)\\d{1,2}:\\d{2}:\\d{2}(?:\\.\\d*)?(?:(?:[ \\t]*)Z|[-+]\\d{1,2}(?::\\d{1,2})?)?))|(=)|(<<))(?:(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},]))"
 				}
 			]
 		},
@@ -577,7 +577,7 @@
 					"match": "\\G((&))([^\\s\\[\\]/{/},]+)(\\S+)?"
 				},
 				{
-					"match": "(?x)\n                        \\G\n                        (?:\n                            ! < (?: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]] )+ >\n                          | (?:!(?:[0-9A-Za-z\\-]*!)?) (?: %[0-9A-Fa-f]{2} | [0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()] )+\n                          | !\n                        )\n                        (?=\\ |\\t|$)\n                    ",
+					"match": "(?x)\\G(?:!<(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()\\[\\]])+>|(?:!(?:[0-9A-Za-z\\-]*!)?)?(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\\-#;/?:@&=+$,_.!~*'()])+|!)(?=\\s|\\t|$)",
 					"name": "storage.type.tag-handle.yaml"
 				},
 				{
