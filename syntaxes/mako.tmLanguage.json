@@ -38,11 +38,6 @@
       ]
     },
     {
-      "comment": "comments",
-      "match": "(##(.*)$)",
-      "name": "comment.line.mako"
-    },
-    {
       "begin": "(<%\\s)",
       "captures": {
         "1": {
