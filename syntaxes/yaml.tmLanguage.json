@@ -31,21 +31,24 @@
 	],
 	"repository": {
 		"block-python": {
-			"begin": "^((?:verification )?code:)\\s*(\\|)([1-9])?([-+])?(.*\\n?)",
+			"begin": "^(?:([ ]*)((?:verification )?code:)\\s*(\\|))([1-9])?([-+])?(.*\\n?)",
 			"beginCaptures": {
 				"1": {
-					"name": "entity.name.tag.yaml"
+					"name": "punctuation.whitespace.document.leading.yaml"
 				},
 				"2": {
-					"name": "keyword.control.flow.block-scalar.literal.yaml"
+					"name": "entity.name.tag.yaml"
 				},
 				"3": {
-					"name": "constant.numeric.indentation-indicator.yaml"
+					"name": "keyword.control.flow.block-scalar.literal.yaml"
 				},
 				"4": {
-					"name": "storage.modifier.chomping-indicator.yaml"
+					"name": "constant.numeric.indentation-indicator.yaml"
 				},
 				"5": {
+					"name": "storage.modifier.chomping-indicator.yaml"
+				},
+				"6": {
 					"patterns": [
 						{
 							"include": "#comment"
@@ -58,11 +61,11 @@
 				}
 			},
 			"end": "^(?=\\S)|(?!\\G)",
-			"contentName": "source.python",
 			"patterns": [
 				{
 					"begin": "^([ ]+)(?! )",
 					"end": "^(?!\\1|\\s*$)",
+					"name": "source.python",
 					"patterns": [
 						{
 							"include": "source.python"
