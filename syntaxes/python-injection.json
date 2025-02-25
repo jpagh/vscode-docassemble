@@ -16,8 +16,13 @@
       ]
     },
     {
-      "begin": "(\\.using\\()",
+      "begin": "\\.(using)\\(",
       "end": "(\\))",
+      "beginCaptures": {
+        "1": {
+          "name": "meta.function-call.python"
+        }
+      },
       "patterns": [
         {
           "include": "source.python"
