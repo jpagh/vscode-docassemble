@@ -29,43 +29,84 @@
 			"include": "#node"
 		}
 	],
-	"block-scalar": {
-		"begin": "(?:(\\|)|(>))([1-9])?([-+])?(.*\\n?)",
-		"beginCaptures": {
-			"1": {
-				"name": "keyword.control.flow.block-scalar.literal.yaml"
-			},
-			"2": {
-				"name": "keyword.control.flow.block-scalar.folded.yaml"
-			},
-			"3": {
-				"name": "constant.numeric.indentation-indicator.yaml"
-			},
-			"4": {
-				"name": "storage.modifier.chomping-indicator.yaml"
-			},
-			"5": {
-				"patterns": [
-					{
-						"include": "#comment"
-					},
-					{
-						"match": ".+",
-						"name": "invalid.illegal.expected-comment-or-newline.yaml"
-					}
-				]
-			}
-		},
-		"end": "^(?=\\S)|(?!\\G)",
-		"patterns": [
-			{
-				"begin": "^([ ]+)(?! )",
-				"end": "^(?!\\1|\\s*$)",
-				"include": "source.mako"
-			}
-		]
-	},
 	"repository": {
+		"block-python": {
+			"begin": "^((?:verification )?code:)\\s*(\\|)([1-9])?([-+])?(.*\\n?)",
+			"beginCaptures": {
+				"1": {
+					"name": "entity.name.tag.yaml"
+				},
+				"2": {
+					"name": "keyword.control.flow.block-scalar.literal.yaml"
+				},
+				"3": {
+					"name": "constant.numeric.indentation-indicator.yaml"
+				},
+				"4": {
+					"name": "storage.modifier.chomping-indicator.yaml"
+				},
+				"5": {
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"match": ".+",
+							"name": "invalid.illegal.expected-comment-or-newline.yaml"
+						}
+					]
+				}
+			},
+			"end": "^(?=\\S)|(?!\\G)",
+			"contentName": "source.python",
+			"patterns": [
+				{
+					"begin": "^([ ]+)(?! )",
+					"end": "^(?!\\1|\\s*$)",
+					"patterns": [
+						{
+							"include": "source.python"
+						}
+					]
+				}
+			]
+		},
+		"block-scalar": {
+			"begin": "(?:(\\|)|(>))([1-9])?([-+])?(.*\\n?)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.flow.block-scalar.literal.yaml"
+				},
+				"2": {
+					"name": "keyword.control.flow.block-scalar.folded.yaml"
+				},
+				"3": {
+					"name": "constant.numeric.indentation-indicator.yaml"
+				},
+				"4": {
+					"name": "storage.modifier.chomping-indicator.yaml"
+				},
+				"5": {
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"match": ".+",
+							"name": "invalid.illegal.expected-comment-or-newline.yaml"
+						}
+					]
+				}
+			},
+			"end": "^(?=\\S)|(?!\\G)",
+			"patterns": [
+				{
+					"begin": "^([ ]+)(?! )",
+					"end": "^(?!\\1|\\s*$)",
+					"name": "source.mako"
+				}
+			]
+		},
 		"block-collection": {
 			"patterns": [
 				{
@@ -87,6 +128,9 @@
 			"patterns": [
 				{
 					"include": "#prototype"
+				},
+				{
+					"include": "#block-python"
 				},
 				{
 					"include": "#block-scalar"

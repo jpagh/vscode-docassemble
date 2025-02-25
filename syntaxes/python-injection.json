@@ -16,15 +16,6 @@
       ]
     },
     {
-      "begin": "(?<=^[\\s]*(validation )?\\bcode:)",
-      "end": "(?=---|-?[ ]*[^:]*:[ ]*[\\w])",
-      "patterns": [
-        {
-          "include": "source.python"
-        }
-      ]
-    },
-    {
       "begin": "(\\.using\\()",
       "end": "(\\))",
       "patterns": [
