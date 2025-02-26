@@ -1,10 +1,11 @@
 # Changelog
 
-## 0.3.7 (2025-02-25)
-- Fixed `:` (colons) incorrectly highlighting as a YAML key and breaking subsequent highlighting in `|` blocks.
+## 0.3.7 (2025-02-26)
+- Fixed an issue where Mako wasn't correctly applied in block-scalars (`|`), particularly on the first line.
+- Fixed `:` (colons) being incorrectly highlighted as a YAML key and breaking subsequent highlighting in `|` blocks.
 - Removed `#` as a comment marker in Mako so that Markdown headers won't be "commented out" anymore.
+- Cleaned up and expanded Python highlighting to more `code` blocks like `attachment code` and `verification code`.
 - Updated YAML highlighting of values to be more Pythonic, so the only boolean values are "True" and "False" and the only null value is "None" (removed "true|TRUE", "false|FALSE", and "null|Null|NULL").
-- Cleaned up highlighting in `code` and `verification code` blocks.
 
 ## 0.3.6 (2025-02-22)
 Added syntax highlighting to `validation code` blocks.
