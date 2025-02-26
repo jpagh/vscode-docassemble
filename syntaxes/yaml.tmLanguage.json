@@ -75,36 +75,16 @@
 			]
 		},
 		"block-scalar": {
-			"begin": "(?:(\\|)|(>))([1-9])?([-+])?(.*\\n?)",
+			"begin": "(?:(\\|))(.*\\s*)",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.control.flow.block-scalar.literal.yaml"
-				},
-				"2": {
-					"name": "keyword.control.flow.block-scalar.folded.yaml"
-				},
-				"3": {
-					"name": "constant.numeric.indentation-indicator.yaml"
-				},
-				"4": {
-					"name": "storage.modifier.chomping-indicator.yaml"
-				},
-				"5": {
-					"patterns": [
-						{
-							"include": "#comment"
-						},
-						{
-							"match": ".+",
-							"name": "invalid.illegal.expected-comment-or-newline.yaml"
-						}
-					]
 				}
 			},
 			"end": "^(?=\\S)|(?!\\G)",
 			"patterns": [
 				{
-					"begin": "^(\\1)(?! )",
+					"begin": "^(?=([ ]+)(?! ))",
 					"end": "^(?!\\1|\\s*$)",
 					"name": "source.mako"
 				}
