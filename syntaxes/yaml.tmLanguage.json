@@ -31,7 +31,7 @@
 	],
 	"repository": {
 		"block-python": {
-			"begin": "^(?:([ ]*)((?:verification )?code:)\\s*(\\|))([1-9])?([-+])?(.*\\n?)",
+			"begin": "^(?:([ ]*)((?:[a-zA-Z]+ )?code:)\\s*(\\|))([1-9])?([-+])?(.*\\n?)",
 			"beginCaptures": {
 				"1": {
 					"name": "punctuation.whitespace.document.leading.yaml"
