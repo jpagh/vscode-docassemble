@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.8 (2025-02-26)
+Added Python highlighting to all blocks' `need: ` expression and list items.
+
 ## 0.3.7 (2025-02-26)
 - Fixed an issue where Mako wasn't correctly applied in block-scalars (`|`), particularly on the first line (improves 0.3.5).
 
