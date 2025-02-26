@@ -3,13 +3,17 @@
   "injectionSelector": "L:source.yaml -comment",
   "patterns": [
     {
-      "begin": "^[\\s]*(if)(:)\\s(?=.*$)",
-      "end": "$",
+      "begin": "^[\\s]*(if|need)(:)\\s(?=.*$)",
+      "end": "(?=^\\S)",
       "beginCaptures": {
         "1": { "name": "entity.name.tag.yaml" },
         "2": { "name": "punctuation.separator.key-value.mapping.yaml" }
       },
       "patterns": [
+        {
+          "match": "^\\s+(-)(?!\\S)",
+          "name": "punctuation.definition.block.sequence.item.yaml"
+        },
         {
           "include": "source.python"
         }
