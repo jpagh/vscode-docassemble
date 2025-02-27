@@ -1,7 +1,54 @@
 {
   "scopeName": "python.injection",
-  "injectionSelector": "L:source.yaml -comment",
+  "injectionSelector": "L:source.yaml",
   "patterns": [
+    {
+			"begin": "^(?:([ ]*)((?:[a-zA-Z]+ )?code)(:)\\s*(\\|))([1-9])?([-+])?(.*\\n?)",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.whitespace.document.leading.yaml"
+				},
+				"2": {
+					"name": "entity.name.tag.yaml"
+				},
+				"3": {
+					"name": "punctuation.separator.key-value.mapping.yaml"
+				},
+				"4": {
+					"name": "keyword.control.flow.block-scalar.literal.yaml"
+				},
+				"5": {
+					"name": "constant.numeric.indentation-indicator.yaml"
+				},
+				"6": {
+					"name": "storage.modifier.chomping-indicator.yaml"
+				},
+				"7": {
+					"patterns": [
+						{
+							"include": "source.yaml#comment"
+						},
+						{
+							"match": ".+",
+							"name": "invalid.illegal.expected-comment-or-newline.yaml"
+						}
+					]
+				}
+			},
+			"end": "^(?=\\S)|(?!\\G)",
+			"patterns": [
+				{
+					"begin": "^(?=([ ]+)(?! ))",
+					"end": "^(?!\\1|\\s*$)",
+					"name": "source.python",
+					"patterns": [
+						{
+							"include": "source.python"
+						}
+					]
+				}
+			]
+		},
     {
       "begin": "^[\\s]*(if|need)(:)\\s(?=.*$)",
       "end": "(?=^\\S)",

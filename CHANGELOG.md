@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.9 (2025-02-27)
+Improved `code` block parsing.
+
 ## 0.3.8 (2025-02-26)
 Added Python highlighting to all blocks' `need: ` expression and list items.
 
