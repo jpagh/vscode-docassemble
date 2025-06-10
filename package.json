@@ -90,6 +90,12 @@
 				"scopeName": "jinja.injection",
 				"path": "./syntaxes/jinja-injection.json"
 			}
+		],
+		"yamlValidation": [
+			{
+				"fileMatch": ["*.yml"],
+				"url": "./schema.json"
+			}
 		]
 	},
 	"__metadata": {

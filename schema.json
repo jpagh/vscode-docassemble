@@ -1,0 +1,1098 @@
+{
+  "$comment": "special vars: https://docassemble.org/docs/special.html",
+  "$id": "docassemble",
+  "unevaluatedProperties": false,
+  "type": "object",
+  "properties": {
+    "action": {
+      "type": "string",
+      "$comment": "only in question block? where in docs is top level item?"
+    },
+    "action buttons": {
+      "$comment": "done. https://docassemble.org/docs/questions.html#action%20buttons. they don't always set a field",
+      "oneOf": [
+        {
+          "type": "object",
+          "unevaluatedProperties": false,
+          "required": ["code"],
+          "properties": {
+            "code": { "type": "string", "$comment": "py:[{}]" }
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "unevaluatedProperties": false,
+            "required": ["action", "label"],
+            "properties": {
+              "action": {
+                "type": "string",
+                "$comment": "var"
+              },
+              "arguments": {
+                "type": "object",
+                "unevaluatedProperties": true
+              },
+              "forget prior": {
+                "type": "boolean"
+              },
+              "icon": {
+                "type": "string",
+                "$comment": "can't be `enum` as user might have font awesome pro or other stuff"
+              },
+              "label": {
+                "type": "string",
+                "$comment": "var"
+              },
+              "new window": {
+                "type": "boolean",
+                "$comment": "todo: on action or link in action?"
+              },
+              "placement": {
+                "type": "string",
+                "enum": ["before"]
+              },
+              "color": true,
+              "css class": true,
+              "show if": true
+            },
+            "allOf": [
+              {"$ref": "#/$defs/color"},
+              {"$ref": "#/$defs/css_class"},
+              {"$ref": "#/$defs/show_if_python_only"}
+            ]
+          }
+        }
+      ]
+    },
+    "all_variables": {
+      "type": "string",
+      "$comment": "where in docs is top level item?"
+    },
+    "allow downloading": {
+      "$comment": "python. done.",
+      "anyOf": [
+        { "type": "boolean" },
+        { "type": "string" }
+      ]
+    },
+    "allow emailing": {
+      "$comment": "python. Changlelog 0.2.42 - 2018-03-25 accepts python.",
+      "anyOf": [
+        { "type": "boolean" },
+        { "type": "string" }
+      ]
+    },
+    "allow reordering": {
+      "$comment": "0.4.12 - 2019-03-01. As of 10/12/2023, anything goes, but only `False` or absence prevents reordering, no python evaluated. I'm making the spec we want for this one, not the one we have.",
+      "type": "boolean"
+    },
+    "allowed to set": {
+      "type": "string"
+    },
+    "always include editable files": {
+      "$comment": "done",
+      "description": "https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L5799-L5803",
+      "oneOf": [
+        {"type": "boolean"},
+        {
+          "description": "python",
+          "type": "string"
+        }
+      ]
+    },
+    "attachment": {
+      "description": "same as `attachments`. need var name or mandatory, etc?",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {"$ref": "#/$defs/attachment_object"}
+        },
+        {"$ref": "#/$defs/attachment_object"},
+        {
+          "type": "string",
+          "description": "filename"
+        }
+      ]
+    },
+    "attachment code": {
+      "type": "string"
+    },
+    "attachment options": {
+      "$comment": "https://docassemble.org/docs/documents.html#customization",
+      "type": "string"
+    },
+    "attachments": {
+      "type": "string"
+    },
+    "attachments code": {
+      "type": "string"
+    },
+    "audio": {
+      "type": "string"
+    },
+    "auto open": {
+      "type": "string"
+    },
+    "auto terms": {
+      "type": "string"
+    },
+    "back button": {
+      "type": "string"
+    },
+    "back button label": {
+      "type": "string"
+    },
+    "backgroundresponse": {
+      "type": "string"
+    },
+    "binaryresponse": {
+      "type": "string"
+    },
+    "breadcrumb": {
+      "type": "string"
+    },
+    "buttons": {
+      "type": "array"
+    },
+    "check in": {
+      "type": "string",
+      "$comment": "only in question block?"
+    },
+    "choices": {
+      "type": "string",
+      "$comment": "array?"
+    },
+    "code": {
+      "type": "string"
+    },
+    "columns": {
+      "type": "array",
+      "$comment": "only in table block?"
+    },
+    "combobox": {
+      "type": "string"
+    },
+    "command": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "confirm": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string",
+      "$comment": "only in template block?"
+    },
+    "content file": {
+      "type": "string"
+    },
+    "content type": {
+      "type": "string"
+    },
+    "continue button color": {
+      "type": "string"
+    },
+    "continue button field": {
+      "type": "string"
+    },
+    "continue button label": {
+      "type": "string"
+    },
+    "corner back button label": {
+      "type": "string"
+    },
+    "css class": {
+      "type": "string"
+    },
+    "data": {
+      "type": "string"
+    },
+    "data from code": {
+      "type": "string"
+    },
+    "datatype": {
+      "type": "string"
+    },
+    "decoration": {
+      "type": "string"
+    },
+    "def": {
+      "type": "string"
+    },
+    "default": {
+      "type": "string"
+    },
+    "default language": {
+      "type": "string"
+    },
+    "default role": {
+      "type": "string"
+    },
+    "default screen parts": {
+      "type": "string"
+    },
+    "default validation messages": {
+      "type": "string"
+    },
+    "delete buttons": {
+      "type": "string"
+    },
+    "depends on": {
+      "type": "string"
+    },
+    "disable continue button": {
+      "type": "string"
+    },
+    "dropdown": {
+      "type": "string"
+    },
+    "edit": {
+      "type": "string"
+    },
+    "edit header": {
+      "type": "string"
+    },
+    "email address default": {
+      "type": "string"
+    },
+    "email body": {
+      "type": "string"
+    },
+    "email subject": {
+      "type": "string"
+    },
+    "email template": {
+      "type": "string"
+    },
+    "event": {
+      "type": "string"
+    },
+    "extras": {
+      "type": "string"
+    },
+    "features": {
+      "type": "string"
+    },
+    "field": {
+      "type": "string"
+    },
+    "fields": {
+      "$comment": "notes: a field that's a string can't have other items. Also, `label` prop will overwrite an arbitrary `My lable: my_var` configuration.",
+      "unevaluatedItems": false,
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "unevaluatedProperties": true,
+            "properties": {
+              "choices": { "type": "string" },
+              "datatype": { "type": "string" },
+              "input type": {
+                "type": "string",
+                "enum": [
+                  "text"
+                ]
+              },
+              "show if": { "type": "string" },
+              "validation": { "type": "string" }
+            }
+          }
+        ]
+      }
+    },
+    "ga id": {
+      "type": "string"
+    },
+    "generic list object": {
+      "type": "string"
+    },
+    "generic object": {
+      "type": "string"
+    },
+    "help": {
+      "type": "string",
+      "$comment": "only in question block?"
+    },
+    "hide continue button": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "if": {
+      "type": "string"
+    },
+    "image sets": {
+      "type": "string"
+    },
+    "images": {
+      "type": "string"
+    },
+    "imports": {
+      "type": "string"
+    },
+    "include": {
+      "type": "string"
+    },
+    "include attachment notice": {
+      "type": "string"
+    },
+    "include download tab": {
+      "type": "string"
+    },
+    "include_internal": {
+      "type": "string"
+    },
+    "indent": {
+      "type": "string"
+    },
+    "initial": {
+      "type": "string"
+    },
+    "interview help": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string"
+    },
+    "list collect": {
+      "type": "string"
+    },
+    "machine learning storage": {
+      "type": "string"
+    },
+    "mako": {
+      "type": "string"
+    },
+    "mandatory": {
+      "type": "boolean"
+    },
+    "manual attachment list": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "string"
+    },
+    "modules": {
+      "type": "string"
+    },
+    "need": {
+      "type": "string"
+    },
+    "not available label": {
+      "type": "string"
+    },
+    "noyes": {
+      "type": "string"
+    },
+    "noyesmaybe": {
+      "type": "string"
+    },
+    "null response": {
+      "type": "string"
+    },
+    "objects": {
+      "type": "string"
+    },
+    "objects from file": {
+      "type": "string"
+    },
+    "on change": {
+      "type": "string"
+    },
+    "only sets": {
+      "type": "string"
+    },
+    "order": {
+      "type": "string"
+    },
+    "orelse": {
+      "type": "string"
+    },
+    "pen color": {
+      "type": "string"
+    },
+    "prevent going back": {
+      "type": "string"
+    },
+    "progress": {
+      "type": "string",
+      "$comment": "only in question block?"
+    },
+    "progressive": {
+      "type": "string"
+    },
+    "question": {
+      "type": "string"
+    },
+    "question metadata": {
+      "type": "string",
+      "$comment": "object"
+    },
+    "read only": {
+      "type": "string"
+    },
+    "reconsider": {
+      "type": "string"
+    },
+    "redirect url": {
+      "type": "string"
+    },
+    "reload": {
+      "type": "string"
+    },
+    "require": {
+      "type": "string"
+    },
+    "require gathered": {
+      "type": "string"
+    },
+    "required": {
+      "type": "string"
+    },
+    "reset": {
+      "type": "string"
+    },
+    "response": {
+      "type": "string"
+    },
+    "response code": {
+      "type": "string"
+    },
+    "response filename": {
+      "type": "string"
+    },
+    "resume button color": {
+      "type": "string"
+    },
+    "resume button label": {
+      "type": "string"
+    },
+    "review": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "rows": {
+      "type": "string",
+      "$comment": "only in table block?"
+    },
+    "scan for variables": {
+      "type": "string"
+    },
+    "script": {
+      "type": "string"
+    },
+    "section": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "string"
+    },
+    "segment": {
+      "type": "string"
+    },
+    "segment id": {
+      "type": "string"
+    },
+    "sets": {
+      "type": "string"
+    },
+    "show if empty": {
+      "type": "string"
+    },
+    "show incomplete": {
+      "type": "string"
+    },
+    "shuffle": {
+      "type": "string",
+      "$comment": "only in question block?"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "skip undefined": {
+      "type": "string"
+    },
+    "sleep": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string",
+      "$comment": "only in template block?"
+    },
+    "subquestion": {
+      "type": "string"
+    },
+    "supersedes": {
+      "type": "string"
+    },
+    "table": {
+      "type": "string",
+      "$comment": "object?"
+    },
+    "table css class": {
+      "type": "string"
+    },
+    "tabular": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "template": {
+      "type": "string"
+    },
+    "terms": {
+      "type": "string"
+    },
+    "translations": {
+      "type": "string"
+    },
+    "undefine": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "use objects": {
+      "type": "string"
+    },
+    "usedefs": {
+      "type": "string"
+    },
+    "validation code": {
+      "type": "string",
+      "$comment": "only in question block?"
+    },
+    "variable name": {
+      "type": "string"
+    },
+    "video": {
+      "type": "string"
+    },
+    "yesno": {
+      "type": "string"
+    },
+    "yesnomaybe": {
+      "type": "string"
+    },
+    "zip filename": {
+      "type": "string"
+    }
+  },
+  "anyOf": [
+    { "$ref": "#/$defs/screen_parts_keys" },
+    { "$ref": "#/$defs/html_bits" }
+  ],
+  "dependencies": {
+    "action buttons": {
+      "required": ["question"],
+      "anyOf": [
+        { "required": [ "buttons_sometimes" ] },
+        { "required": [ "checkin_maybe" ] },
+        { "required": [ "continue button field" ] },
+        { "required": [ "event" ] },
+        { "required": [ "field" ] },
+        { "required": [ "fields" ] },
+        { "required": [ "mandatory" ] },
+        { "required": [ "noyes" ] },
+        { "required": [ "noyesmaybe" ] },
+        { "required": [ "only sets" ] },
+        { "required": [ "sets" ] },
+        { "required": [ "signature" ] },
+        { "required": [ "yesno" ] },
+        { "required": [ "yesnomaybe" ] }
+      ]
+    },
+    "allow downloading": {
+      "oneOf": [
+        {"required": ["attachment"]},
+        {"required": ["attachments"]}
+      ]
+    },
+    "allow emailing": {
+      "oneOf": [
+        {"required": ["attachment"]},
+        {"required": ["attachments"]}
+      ]
+    },
+    "allow reordering": ["table"],
+    "always include editable files": {
+      "oneOf": [
+        {"required": ["attachment"]},
+        {"required": ["attachments"]}
+      ]
+    },
+    "attachment": [],
+    "attachments": [],
+    "buttons": [ "question" ],
+    "choices": [ "question", "field" ],
+    "combobox": [ "question", "field" ],
+    "continue button field": [ "question" ],
+    "dropdown": [ "question", "field" ],
+    "field": {
+      "allOf": [
+        { "not": {"required": [ "fields" ] } },
+        { "not": {"required": [ "noyes" ] } },
+        { "not": {"required": [ "noyesmaybe" ] } },
+        { "not": {"required": [ "signature" ] } },
+        { "not": {"required": [ "yesno" ] } },
+        { "not": {"required": [ "yesnomaybe" ] } },
+        { "required": ["question"]}
+      ]
+    },
+    "fields": {
+      "$comment": "allows `continue button field`. What else does that?",
+      "allOf": [
+
+
+
+        { "not": {"required": [ "choices" ] } },
+        { "not": {"required": [ "combobox" ] } },
+        { "not": {"required": [ "dropdown" ] } },
+
+
+
+
+        { "not": {"required": [ "field" ] } },
+        { "not": {"required": [ "noyes" ] } },
+        { "not": {"required": [ "noyesmaybe" ] } },
+        { "not": {"required": [ "signature" ] } },
+        { "not": {"required": [ "yesno" ] } },
+        { "not": {"required": [ "yesnomaybe" ] } },
+        { "required": ["question"]}
+      ]
+    },
+    "list collect": [ "question" ],
+    "noyes": [ "question" ],
+    "noyesmaybe": [ "question" ],
+    "question": {
+      "unevaluatedProperties": false,
+      "required": [ "question" ],
+      "$comment": "properties: depends on, on change, recalculate, needs? `anyOf` will make sure at least one appears while rules on individual properties will ensure no conflicts. I'm not sure how to use the `anyOf`",
+      "properties": {
+        "action buttons": {},
+        "allow downloading": {},
+        "allow emailing": {},
+        "always include editable files": {},
+        "back button": {},
+        "back button label": {},
+        "buttons": {},
+        "checkin": {},
+        "choices": {},
+        "combobox": {},
+        "comment": {},
+        "continue button color": {},
+        "continue button field": {},
+        "continue button label": {},
+        "corner back button label": {},
+        "css": {},
+        "css class": {},
+        "disable continue button": {},
+        "dropdown": {},
+        "event": {},
+        "field": {},
+        "fields": {},
+        "id": {},
+        "list collect": {},
+        "noyes": {},
+        "noyesmaybe": {},
+        "question": {},
+        "signature": {},
+        "subquestion": {},
+        "attachment": {},
+        "attachments": {},
+        "mandatory": {},
+        "generic object": {},
+        "validation code": {},
+        "help": {},
+        "terms": {},
+        "sets": {},
+        "only sets": {},
+        "yesno": {},
+        "yesnomaybe": {}
+      },
+      "anyOf": [
+        { "required": [ "action_buttons_sometimes" ] },
+        { "required": [ "buttons_sometimes" ] },
+        { "required": [ "checkin_maybe" ] },
+        { "required": [ "continue button field" ] },
+        { "required": [ "event" ] },
+        { "required": [ "field" ] },
+        { "required": [ "fields" ] },
+        { "required": [ "mandatory" ] },
+        { "required": [ "noyes" ] },
+        { "required": [ "noyesmaybe" ] },
+        { "required": [ "only sets" ] },
+        { "required": [ "sets" ] },
+        { "required": [ "signature" ] },
+        { "required": [ "yesno" ] },
+        { "required": [ "yesnomaybe" ] }
+      ]
+    },
+    "signature": [ "question" ],
+    "subquestion": [ "question" ],
+    "yesno": [ "question" ],
+    "yesnomaybe": [ "question" ],
+
+    "ga id": [ "question" ],
+    "include": {
+      "unevaluatedProperties": false,
+      "required": [ "include" ],
+      "properties": {
+        "comment": {},
+        "id": {},
+        "include": {}
+      }
+    },
+    "table": {
+      "unevaluatedProperties": false,
+      "required": ["table", "rows", "columns"],
+      "$comment": "",
+      "properties": {
+        "table": {},
+        "allow reordering": {},
+        "columns": {},
+        "comment": {},
+        "edit": {},
+        "id": {},
+        "rows": {},
+        "others like id and comment?": {}
+      }
+    }
+  },
+  "$defs": {
+    "screen_parts_keys": {
+      "type": "object",
+      "properties": {
+        "post": {
+          "type": "string"
+        },
+        "pre": {
+          "type": "string"
+        },
+        "right": {
+          "type": "string"
+        },
+        "under": {
+          "type": "string"
+        }
+      }
+    },
+    "color": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "success",
+            "danger",
+            "warning",
+            "info",
+            "light",
+            "link",
+            "dark"
+          ]
+        }
+      }
+    },
+    "html_bits": {
+      "type": "object",
+      "properties": {
+        "css": {
+          "type": "string"
+        }
+      }
+    },
+    "css_class": {
+      "type": "object",
+      "properties": {
+        "css class": {
+          "type": "string"
+        }
+      }
+    },
+    "show_if_python_only": {
+      "type": "object",
+      "properties": {
+        "show if": {
+          "type": "string",
+          "$comment": "py"
+        }
+      }
+    },
+    "attachment_object": {
+      "$comment": "Rule for raw is ours. `process_attachment() is at https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L4951",
+      "type": "object",
+      "oneOf": [
+        {"required": ["content"]},
+        {"required": ["content file"]},
+        {"required": ["docx template file"]},
+        {"required": ["pdf template file"]}
+      ],
+      "dependencies": {
+        "raw": {"required": ["content file"]},
+        "pdf template file": {
+          "properties": {
+            "valid formats": {
+              "enum": ["pdf", ["pdf"]]
+            }
+          }
+        },
+        "docx template file": {
+          "properties": {
+            "valid formats": {
+              "enum": ["pdf", "docx", ["pdf"], ["docx"], ["pdf", "docx"], ["docx", "pdf"]]
+            }
+          }
+        }
+      },
+      "unevaluatedProperties": false,
+      "properties": {
+        "allow privileges": {
+          "$comment": "https://docassemble.org/docs/documents.html#permissions",
+          "type": "string"
+        },
+        "allow users": {
+          "$comment": "https://docassemble.org/docs/documents.html#permissions",
+          "type": "string"
+        },
+        "checkbox export value": { "type": "string" },
+        "code": {
+          "$comment": "https://docassemble.org/docs/documents.html#template%20code",
+          "type": "string"
+        },
+        "content": {
+          "description": "mako. also works with `template`, though a bit differently?",
+          "type": "string"
+        },
+        "content file": {
+          "description": "file names in /templates or whole filepaths, and, if `code`, a URL, DAFile, DAFileList, DAFileCollection, or DAStaticFile. also works with `template`? what is `content file code`? https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L5082-L5101",
+          "oneOf": [
+            {
+              "type": "array",
+              "items": { "type": "string", "description": "filepath" }
+            },
+            {
+              "type": "object",
+              "unevaluatedProperties": false,
+              "required": ["code"],
+              "properties": {
+                "code": { "type": "string", "description": "py:[filepath]" }
+              }
+            },
+            {
+              "description": "filepath",
+              "type": "string"
+            }
+          ]
+        },
+        "decimal places": {
+          "$comment": "https://docassemble.org/docs/documents.html#template%20code",
+          "type": "integer"
+        },
+        "description": {
+          "description": "mako | markdown",
+          "type": "string",
+          "default": ""
+        },
+        "docx template file": {
+          "$comment": "`valid format` == pdf | docx, object uses `code:`. https://docassemble.org/docs/documents.html#docx%20template%20file, https://docassemble.org/docs/documents.html#template%20file%20code",
+          "anyOf": [
+            { "type": "array" },
+            { "type": "object" },
+            { "type": "string" }
+          ]
+        },
+        "editable": {
+          "$comment": "https://docassemble.org/docs/documents.html#editable",
+          "type": "string"
+        },
+        "field code": {
+          "$comment": "https://docassemble.org/docs/documents.html#particfields, https://docassemble.org/docs/documents.html#template%20code",
+          "anyOf": [
+            { "type": "boolean" },
+            { "type": "string" }
+          ]
+        },
+        "field variables": {
+          "$comment": "https://docassemble.org/docs/documents.html#template%20code",
+          "type": "string"
+        },
+        "fields": {
+          "$comment": "mako, not markdown sort of. https://docassemble.org/docs/documents.html#particfields. https://docassemble.org/docs/documents.html#update%20references",
+          "type": "string"
+        },
+        "filename": {
+          "$comment": "default empty string? https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L4976",
+          "description": "mako",
+          "type": "string",
+          "default": "Document"
+        },
+        "hyperlink style": {
+          "$comment": "needs `docx template file`. default null? (source: page vars) https://docassemble.org/docs/documents.html#hyperlink%20style",
+          "type": "string"
+        },
+        "metadata": {
+          "$comment": "https://docassemble.org/docs/documents.html#pandoc",
+          "type": "string"
+        },
+        "language": {
+          "$comment": "https://docassemble.org/docs/documents.html#language",
+          "description": "language code",
+          "type": "string"
+        },
+        "name": {
+          "description": "mako | markdown",
+          "type": "string",
+          "default": "Document"
+        },
+        "password": {
+          "$comment": "default null? (page vars) https://docassemble.org/docs/documents.html#password",
+          "anyOf": [
+            { "type": "array" },
+            { "type": "object" },
+            { "type": "string" }
+          ]
+        },
+        "pdf/a": {
+          "description": "in `features` it's always a bool: https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L2150. In attachment, can only exist with `fields` (with a PDF): https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L5315. String here can be `<pdfa expression>` (python, I think). https://docassemble.org/docs/documents.html#pdfa.",
+          
+          "default": false,
+          "anyOf": [
+            { "type": "boolean" },
+            { "type": "string" }
+          ]
+        },
+        "pdf template file": {
+          "$comment": "`valid format` only pdf, object uses `code:`. https://docassemble.org/docs/documents.html#docx%20template%20file, https://docassemble.org/docs/documents.html#template%20file%20code",
+          "anyOf": [
+            { "type": "array" },
+            { "type": "object" },
+            { "type": "string" }
+          ]
+        },
+        "persistent": {
+          "$comment": "https://docassemble.org/docs/documents.html#permissions",
+          "type": "string"
+        },
+        "private": {
+          "$comment": "https://docassemble.org/docs/documents.html#permissions",
+          "type": "string"
+        },
+        "raw": {
+          "description": "needs `content file`",
+          "type": "boolean",
+          "default": false
+        },
+        "raw field variables": {
+          "$comment": "https://docassemble.org/docs/documents.html#raw%20field%20variables",
+          "type": "string"
+        },
+        "redact": {
+          "$comment": "https://docassemble.org/docs/documents.html#redact",
+          "description": "python",
+          "default": true,
+          "anyOf": [
+            { "type": "boolean" },
+            { "type": "string" }
+          ]
+        },
+        "rendering font": {
+          "$comment": "https://docassemble.org/docs/documents.html#rendering%20font",
+          "description": "str or mako",
+          "type": "string"
+        },
+        "skip undefined": {
+          "$comment": "https://docassemble.org/docs/documents.html#template%20code",
+          "anyOf": [
+            { "type": "boolean" },
+            { "type": "string" }
+          ]
+        },
+        "tagged pdf": {
+          "description": "requires docx. https://docassemble.org/docs/documents.html#pdfa",
+          "default": false,
+          "anyOf": [
+            { "type": "boolean" },
+            { "type": "string" }
+          ]
+        },
+        "template password": {
+          "description": "default null? (page vars)",
+          "type": "string"
+        },
+        "update references": {
+          "$comment": "https://docassemble.org/docs/documents.html#update%20references",
+          "anyOf": [
+            { "type": "boolean" },
+            { "type": "string" }
+          ]
+        },
+        "usedefs": {"type": "string"},
+        "valid formats": {
+          "description": "https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L5136-L5144, https://github.com/jhpyle/docassemble/blob/v1.4.81/docassemble_base/docassemble/base/parse.py#L5261-L5269",
+          "default": ["*"],
+          "oneOf": [
+            {
+              "description": "MIME",
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "$comment": "need more limits. `pdf template file` requires `pdf` only format.",
+              "minItems": 1,
+              "items": {
+                "$comment": "'Which valid formats are relevant depends on what system of document  assembly you are using. If the template is in Markdown format, Pandoc can convert Markdown to lots of different formats'. For docx template file the only options are docx and pdf. For pdf template file, the only option is pdf.",
+                "description": "MIME",
+                "type": "string"
+              },
+              "allOf": [
+                {
+                  "if": { "contains": { "const": "docx" } },
+                  "then": {
+                    "not": { "contains": { "const": "rtf to docx" } }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "variable name": {
+          "description": "var",
+          "type": "string"
+        },
+        "additional yaml": {
+          "$comment": "also `attachment options`. https://docassemble.org/docs/documents.html#customization",
+          "type": "string"
+        },
+        "docx reference file": {
+          "$comment": "also `attachment options`. https://docassemble.org/docs/documents.html#customization",
+          "type": "string"
+        },
+        "initial yaml": {
+          "$comment": "also `attachment options`. https://docassemble.org/docs/documents.html#customization",
+          "type": "string"
+        },
+        "rtf template file": {
+          "$comment": "also `attachment options`. https://docassemble.org/docs/documents.html#customization",
+          "type": "string"
+        },
+        "template file": {
+          "$comment": "also `attachment options`. https://docassemble.org/docs/documents.html#customization",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
