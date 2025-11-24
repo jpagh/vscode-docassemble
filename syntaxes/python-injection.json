@@ -1,6 +1,6 @@
 {
   "scopeName": "python.injection",
-  "injectionSelector": "L:source.yaml",
+  "injectionSelector": "L:source.docassemble.yaml",
   "patterns": [
     {
 			"begin": "^(?:([ ]*)((?:[a-zA-Z]+ )?code)(:)\\s*(\\|))([1-9])?([-+])?(.*\\n?)",

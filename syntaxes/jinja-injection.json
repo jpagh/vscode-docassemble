@@ -1,6 +1,6 @@
 {
   "scopeName": "jinja.injection",
-  "injectionSelector": "L:source.yaml -comment",
+  "injectionSelector": "L:source.docassemble.yaml -comment",
   "patterns": [
     {
       "include": "source.jinja"

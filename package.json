@@ -56,8 +56,8 @@
 		"grammars": [
 			{
 				"language": "docassemble",
-				"scopeName": "source.yaml",
-				"path": "./syntaxes/YAML.tmLanguage.json"
+				"scopeName": "source.docassemble.yaml",
+				"path": "./syntaxes/yaml.tmLanguage.json"
 			},
 			{
 				"language": "jinja",
@@ -71,21 +71,21 @@
 			},
 			{
 				"injectTo": [
-					"source.yaml"
+					"source.docassemble.yaml"
 				],
 				"scopeName": "python.injection",
 				"path": "./syntaxes/python-injection.json"
 			},
 			{
 				"injectTo": [
-					"source.yaml"
+					"source.docassemble.yaml"
 				],
 				"scopeName": "mako.injection",
 				"path": "./syntaxes/mako-injection.json"
 			},
 			{
 				"injectTo": [
-					"source.yaml"
+					"source.docassemble.yaml"
 				],
 				"scopeName": "jinja.injection",
 				"path": "./syntaxes/jinja-injection.json"
