@@ -67,7 +67,7 @@
       ]
     },
     {
-      "begin": "\\.(using)\\(",
+      "begin": "(?<!#.*)\\.(using)\\(",
       "end": "(\\))",
       "beginCaptures": {
         "1": {
