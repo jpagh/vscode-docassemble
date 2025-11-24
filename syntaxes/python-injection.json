@@ -116,6 +116,25 @@
       ]
     },
     {
+      "begin": "^[\\s]*(script)(:)\\s*(?=\\|)\\|?",
+      "end": "(?=^\\S)",
+      "beginCaptures": {
+        "1": { "name": "entity.name.tag.yaml" },
+        "2": { "name": "punctuation.separator.key-value.mapping.yaml" }
+      },
+      "patterns": [
+        {
+          "begin": "^(?=([ ]+)(?! ))",
+          "end": "^(?!\\1|\\s*$)",
+          "patterns": [
+            {
+              "include": "source.js"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "begin": "(?<!#.*)\\.(using)\\(",
       "end": "(\\))",
       "beginCaptures": {
