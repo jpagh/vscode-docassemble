@@ -1,106 +1,106 @@
 {
-	"name": "vscode-docassemble",
-	"displayName": "Docassemble YAML",
-	"description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
-	"icon": "icon.png",
-	"version": "0.3.10",
-	"publisher": "jackadamson",
-	"author": "Jack Adamson",
-	"license": "Apache-2.0",
-	"engines": {
-		"vscode": "^1.40.0"
-	},
-	"categories": [
-		"Programming Languages"
-	],
-	"keywords": [
-		"docassemble",
-		"yaml"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/jpagh/vscode-docassemble"
-	},
-	"contributes": {
-		"languages": [
-			{
-				"id": "docassemble",
-				"aliases": [
-					"Docassemble YAML",
-					"docassemble-yaml"
-				],
-				"extensions": [
-					".yml"
-				],
-				"configuration": "./language-configuration/language-configuration-yaml.json"
-			},
-			{
-				"id": "mako",
-				"aliases": [
-					"Mako",
-					"mako"
-				],
-				"extensions": [],
-				"configuration": "./language-configuration/language-configuration-mako.json"
-			},
-			{
-				"id": "jinja",
-				"aliases": [
-					"Jinja",
-					"jinja"
-				],
-				"extensions": [],
-				"configuration": "./language-configuration/language-configuration-jinja.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "docassemble",
-				"scopeName": "source.docassemble.yaml",
-				"path": "./syntaxes/yaml.tmLanguage.json"
-			},
-			{
-				"language": "jinja",
-				"scopeName": "source.jinja",
-				"path": "./syntaxes/jinja.tmLanguage.json"
-			},
-			{
-				"language": "mako",
-				"scopeName": "source.mako",
-				"path": "./syntaxes/mako.tmLanguage.json"
-			},
-			{
-				"injectTo": [
-					"source.docassemble.yaml"
-				],
-				"scopeName": "python.injection",
-				"path": "./syntaxes/python-injection.json"
-			},
-			{
-				"injectTo": [
-					"source.docassemble.yaml"
-				],
-				"scopeName": "mako.injection",
-				"path": "./syntaxes/mako-injection.json"
-			},
-			{
-				"injectTo": [
-					"source.docassemble.yaml"
-				],
-				"scopeName": "jinja.injection",
-				"path": "./syntaxes/jinja-injection.json"
-			}
-		]
-	},
-	"__metadata": {
-		"id": "517a3d61-d626-45e9-a011-03be13277f9a",
-		"publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
-		"publisherDisplayName": "Jack Adamson",
-		"targetPlatform": "undefined",
-		"updated": false,
-		"isPreReleaseVersion": false,
-		"hasPreReleaseVersion": false,
-		"installedTimestamp": 1707172694885,
-		"pinned": false
-	}
+  "name": "vscode-docassemble",
+  "displayName": "Docassemble YAML",
+  "version": "0.3.10",
+  "description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "docassemble",
+    "yaml"
+  ],
+  "license": "Apache-2.0",
+  "author": "Jack Adamson",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jpagh/vscode-docassemble"
+  },
+  "publisher": "jackadamson",
+  "contributes": {
+    "languages": [
+      {
+        "id": "docassemble",
+        "aliases": [
+          "Docassemble YAML",
+          "docassemble-yaml"
+        ],
+        "extensions": [
+          ".yml"
+        ],
+        "configuration": "./language-configuration/language-configuration-yaml.json"
+      },
+      {
+        "id": "mako",
+        "aliases": [
+          "Mako",
+          "mako"
+        ],
+        "extensions": [],
+        "configuration": "./language-configuration/language-configuration-mako.json"
+      },
+      {
+        "id": "jinja",
+        "aliases": [
+          "Jinja",
+          "jinja"
+        ],
+        "extensions": [],
+        "configuration": "./language-configuration/language-configuration-jinja.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "docassemble",
+        "scopeName": "source.docassemble.yaml",
+        "path": "./syntaxes/yaml.tmLanguage.json"
+      },
+      {
+        "language": "jinja",
+        "scopeName": "source.jinja",
+        "path": "./syntaxes/jinja.tmLanguage.json"
+      },
+      {
+        "language": "mako",
+        "scopeName": "source.mako",
+        "path": "./syntaxes/mako.tmLanguage.json"
+      },
+      {
+        "injectTo": [
+          "source.docassemble.yaml"
+        ],
+        "scopeName": "python.injection",
+        "path": "./syntaxes/python-injection.json"
+      },
+      {
+        "injectTo": [
+          "source.docassemble.yaml"
+        ],
+        "scopeName": "mako.injection",
+        "path": "./syntaxes/mako-injection.json"
+      },
+      {
+        "injectTo": [
+          "source.docassemble.yaml"
+        ],
+        "scopeName": "jinja.injection",
+        "path": "./syntaxes/jinja-injection.json"
+      }
+    ]
+  },
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.40.0"
+  },
+  "__metadata": {
+    "id": "517a3d61-d626-45e9-a011-03be13277f9a",
+    "publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
+    "publisherDisplayName": "Jack Adamson",
+    "targetPlatform": "undefined",
+    "updated": false,
+    "isPreReleaseVersion": false,
+    "hasPreReleaseVersion": false,
+    "installedTimestamp": 1707172694885,
+    "pinned": false
+  }
 }
