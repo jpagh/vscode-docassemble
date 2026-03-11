@@ -1,0 +1,12 @@
+# Valid docassemble with code block
+code: |
+  def calculate_age(birth_year):
+    return 2024 - birth_year
+
+question: What is your birth year?
+fields:
+  - label: Birth Year
+    field: user_birth_year
+    datatype: integer
+    min: 1900
+    max: 2024

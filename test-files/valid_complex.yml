@@ -1,0 +1,53 @@
+# Valid: complex interview setup
+---
+include:
+  - docassemble.base:standard_instructions.yml
+  - docassemble.base:navbar.yml
+  - docassemble.base:signature_page.yml
+
+modules:
+  - docassemble.base.util
+
+default language: en
+
+mandatory: True
+
+default role: user
+
+question: Welcome
+subquestion: |
+  This is a docassemble interview.
+  
+  % if defined('user.name'):
+  Hello, ${ user.name.first }!
+  % endif
+
+buttons:
+  - Continue: continue
+
+---
+question: Your Information
+fields:
+  - label: Full Name
+    field: user.name.text
+  - label: Email
+    field: user.email
+    datatype: email
+    required: True
+  - label: Date of Birth
+    field: user.birth_date
+    datatype: date
+
+---
+question: Review and Sign
+review:
+  - Edit: user.name.text
+    button: |
+      **Name**: ${ user.name.text }
+  - Edit: user.email
+    button: |
+      **Email**: ${ user.email }
+
+signature: user_signature
+
+mandatory: True

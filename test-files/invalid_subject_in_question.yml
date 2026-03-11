@@ -1,0 +1,3 @@
+# Invalid: subject shouldn't be in a question block
+question: Are you sure?
+subject: This is wrong

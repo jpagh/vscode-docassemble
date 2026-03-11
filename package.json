@@ -17,6 +17,22 @@
     "url": "https://github.com/jpagh/vscode-docassemble"
   },
   "publisher": "jackadamson",
+  "main": "./out/extension.js",
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "validate": "node validate.mjs",
+    "validate:test": "node validate.mjs test-files --recursive --json"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "yaml": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.0.0"
+  },
   "contributes": {
     "languages": [
       {
@@ -90,7 +106,7 @@
   },
   "icon": "icon.png",
   "engines": {
-    "vscode": "^1.40.0"
+    "vscode": "^1.75.0"
   },
   "__metadata": {
     "id": "517a3d61-d626-45e9-a011-03be13277f9a",

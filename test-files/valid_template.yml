@@ -1,0 +1,5 @@
+# Valid: template/email block with subject
+template: my_template
+subject: Email Subject
+content: |
+  This is the email content.

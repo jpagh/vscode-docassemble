@@ -1,0 +1,1641 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "docassemble",
+  "$comment": "Top-level Docassemble YAML block schema aligned with docassemble parsing behavior. Keys that are not type-checked here stay permissive to avoid false positives.",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "properties": {
+    "features": {
+      "type": "object",
+      "$comment": "Interview features mapping."
+    },
+    "scan for variables": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "only sets": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "question": {
+      "type": "string",
+      "$comment": "Markdown/Mako text"
+    },
+    "code": {
+      "type": "string",
+      "$comment": "Python source"
+    },
+    "event": {
+      "type": "string"
+    },
+    "translations": {
+      "type": "object"
+    },
+    "default language": {
+      "$ref": "#/$defs/languageCode"
+    },
+    "on change": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "sections": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "progressive": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "auto open": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "section": {
+      "type": "string"
+    },
+    "machine learning storage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "language": {
+      "$ref": "#/$defs/languageCode"
+    },
+    "prevent going back": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "back button": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "continue button label": {
+      "type": "string"
+    },
+    "continue button color": {
+      "$ref": "#/$defs/bootstrapColor"
+    },
+    "resume button label": {
+      "type": "string"
+    },
+    "resume button color": {
+      "$ref": "#/$defs/bootstrapColor"
+    },
+    "back button label": {
+      "type": "string"
+    },
+    "back button color": {
+      "$ref": "#/$defs/bootstrapColor"
+    },
+    "corner back button label": {
+      "type": "string"
+    },
+    "skip undefined": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "list collect": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "mandatory": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "attachment options": {
+      "type": "object"
+    },
+    "script": {
+      "type": "string",
+      "$comment": "JavaScript code"
+    },
+    "css": {
+      "type": "string",
+      "$comment": "CSS code"
+    },
+    "initial": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "default role": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "command": {
+      "type": "string"
+    },
+    "objects from file": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "object"
+            ]
+          }
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "$comment": "Imports objects from files"
+    },
+    "use objects": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "$comment": "Indicates if data structures should be translated into DAList/DADict"
+    },
+    "data": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "variable name": {
+      "type": "string"
+    },
+    "data from code": {
+      "type": "string"
+    },
+    "objects": {
+      "$ref": "#/$defs/objects"
+    },
+    "id": {
+      "type": "string"
+    },
+    "ga id": {
+      "type": "string"
+    },
+    "segment id": {
+      "type": "string"
+    },
+    "segment": {
+      "type": "string"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "order": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ]
+    },
+    "image sets": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "images": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "def": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "mako": {
+      "type": "string"
+    },
+    "interview help": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "default screen parts": {
+      "type": "object"
+    },
+    "default validation messages": {
+      "type": "object"
+    },
+    "generic object": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "modules": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "reset": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "imports": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "terms": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "auto terms": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "role": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "include": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "action buttons": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "color": {
+                "$ref": "#/$defs/bootstrapColor"
+              },
+              "icon": {
+                "type": "string"
+              },
+              "arguments": {
+                "type": "object"
+              },
+              "code": {
+                "type": "string"
+              },
+              "css class": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code"
+          ]
+        }
+      ]
+    },
+    "if": {
+      "type": "string"
+    },
+    "validation code": {
+      "type": "string",
+      "$comment": "Python source; the Python validator also checks for validation_error(...) usage heuristics"
+    },
+    "require": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "attachment": {
+      "$ref": "#/$defs/attachmentLike"
+    },
+    "attachments": {
+      "$ref": "#/$defs/attachmentLike"
+    },
+    "attachment code": {
+      "type": "string"
+    },
+    "allow emailing": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "allow downloading": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "email subject": {
+      "type": "string"
+    },
+    "email body": {
+      "type": "string"
+    },
+    "email template": {
+      "type": "string"
+    },
+    "email address default": {
+      "type": "string"
+    },
+    "progress": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "action": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "response": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "binaryresponse": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "all_variables": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "sleep": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "include_internal": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "css class": {
+      "type": "string",
+      "$comment": "String of classes applied to the body"
+    },
+    "table css class": {
+      "type": "string"
+    },
+    "subquestion": {
+      "type": "string",
+      "$comment": "Markdown/Mako text"
+    },
+    "reload": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "help": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        }
+      ],
+      "$comment": "Help text or mapping of help items"
+    },
+    "audio": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "object"
+            ]
+          }
+        }
+      ]
+    },
+    "video": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "object"
+            ]
+          }
+        }
+      ]
+    },
+    "decoration": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "signature": {
+      "type": "string"
+    },
+    "under": {
+      "type": "string"
+    },
+    "pre": {
+      "type": "string"
+    },
+    "post": {
+      "type": "string"
+    },
+    "right": {
+      "type": "string"
+    },
+    "check in": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "yesno": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "noyes": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "yesnomaybe": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "noyesmaybe": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "sets": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "choices": {
+      "anyOf": [
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "$comment": "List of choices, code reference, or mapping"
+    },
+    "buttons": {
+      "anyOf": [
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "$comment": "List of buttons, code reference, or mapping"
+    },
+    "dropdown": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "combobox": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "field": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "shuffle": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "review": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "need": {
+      "$ref": "#/$defs/needSpecifier"
+    },
+    "depends on": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "target": {
+      "type": "string"
+    },
+    "table": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "columns": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "require gathered": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "allow reordering": {
+      "type": "boolean"
+    },
+    "edit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "delete buttons": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "confirm": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "read only": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "show if empty": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "template": {
+      "type": "string"
+    },
+    "content file": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "reconsider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "undefine": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "continue button field": {
+      "type": "string",
+      "$comment": "Docassemble variable reference"
+    },
+    "fields": {
+      "$ref": "#/$defs/fields"
+    },
+    "indent": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "url": {
+      "type": "string"
+    },
+    "default": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "datatype": {
+      "type": "string"
+    },
+    "allowed to set": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "show incomplete": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "not available label": {
+      "type": "string"
+    },
+    "required": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "always include editable files": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "question metadata": {
+      "type": "object"
+    },
+    "include attachment notice": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "include download tab": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "describe file types": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "manual attachment list": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "breadcrumb": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
+    },
+    "tabular": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "hide continue button": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "disable continue button": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "pen color": {
+      "type": "string"
+    },
+    "gathered": {
+      "type": "boolean"
+    },
+    "show if": {
+      "$ref": "#/$defs/showIfFieldModifier"
+    },
+    "hide if": {
+      "$ref": "#/$defs/showIfFieldModifier"
+    },
+    "js show if": {
+      "type": "string",
+      "$comment": "JavaScript expression; the Python validator also expects at least one val(\"...\") call"
+    },
+    "js hide if": {
+      "type": "string",
+      "$comment": "JavaScript expression; the Python validator also expects at least one val(\"...\") call"
+    },
+    "enable if": {
+      "$ref": "#/$defs/showIfFieldModifier"
+    },
+    "disable if": {
+      "$ref": "#/$defs/showIfFieldModifier"
+    },
+    "js enable if": {
+      "type": "string",
+      "$comment": "JavaScript expression; the Python validator also expects at least one val(\"...\") call"
+    },
+    "js disable if": {
+      "type": "string",
+      "$comment": "JavaScript expression; the Python validator also expects at least one val(\"...\") call"
+    },
+    "disable others": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "filter": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "sort key": {
+      "type": "string"
+    },
+    "sort reverse": {
+      "type": "boolean"
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "Block compatibility guard: `subject` belongs to template/email-style blocks, not question blocks.",
+      "if": {
+        "required": [
+          "question"
+        ]
+      },
+      "then": {
+        "not": {
+          "required": [
+            "subject"
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "bootstrapColor": {
+      "type": "string",
+      "enum": [
+        "primary",
+        "secondary",
+        "success",
+        "danger",
+        "warning",
+        "info",
+        "light",
+        "link",
+        "dark"
+      ]
+    },
+    "languageCode": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}$",
+      "$comment": "Lowercase ISO-639-1 or ISO-639-3 language code."
+    },
+    "needPrePostItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "pre": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "post": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "needSpecifier": {
+      "$comment": "Matches documented `need` forms: string, list of variables, {pre/post}, or list items including {post} objects.",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/needPrePostItem"
+        },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/needPrePostItem"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "attachmentLike": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array",
+          "items": {}
+        }
+      ]
+    },
+    "objects": {
+      "$comment": "Objects must be a list or dict.",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {}
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        }
+      ]
+    },
+    "showIfFieldModifier": {
+      "$comment": "Supports show-if forms: string shorthand, { variable, is }, or { code }.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "variable"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "variable": {
+              "type": "string"
+            },
+            "is": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "fieldItem": {
+      "$comment": "A field descriptor item. Additional properties stay allowed because Docassemble permits label-style keys and arbitrary non-modifier field keys.",
+      "type": "object",
+      "properties": {
+        "address autocomplete": {
+          "type": "boolean"
+        },
+        "accept": {
+          "type": "string"
+        },
+        "choices": {
+          "anyOf": [
+            {
+              "type": "array"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "datatype": {
+          "type": "string",
+          "enum": [
+            "user",
+            "camera",
+            "environment",
+            "camcorder",
+            "checkboxes",
+            "multiselect",
+            "currency",
+            "date",
+            "datetime",
+            "email",
+            "file",
+            "files",
+            "integer",
+            "microphone",
+            "ml",
+            "mlarea",
+            "noyes",
+            "noyesmaybe",
+            "noyesradio",
+            "noyeswide",
+            "number",
+            "object",
+            "object_radio",
+            "object_checkboxes",
+            "object_multiselect",
+            "password",
+            "range",
+            "text",
+            "time",
+            "yesno",
+            "yesnomaybe",
+            "yesnoradio",
+            "yesnowide"
+          ]
+        },
+        "default": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "disabled": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "disable others": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "disable if": {
+          "$ref": "#/$defs/showIfFieldModifier"
+        },
+        "enable if": {
+          "$ref": "#/$defs/showIfFieldModifier"
+        },
+        "field": {
+          "type": "string"
+        },
+        "field metadata": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "file css class": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "floating label": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "grid": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "help": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "hide if": {
+          "$ref": "#/$defs/showIfFieldModifier"
+        },
+        "hint": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string"
+        },
+        "image upload type": {
+          "type": "string",
+          "enum": [
+            "png",
+            "jpeg",
+            "bmp"
+          ]
+        },
+        "input type": {
+          "type": "string",
+          "enum": [
+            "area",
+            "dropdown",
+            "radio",
+            "datalist",
+            "combobox",
+            "ajax",
+            "hidden"
+          ]
+        },
+        "js disable if": {
+          "type": "string"
+        },
+        "js enable if": {
+          "type": "string"
+        },
+        "js hide if": {
+          "type": "string"
+        },
+        "js show if": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "maxlength": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        },
+        "maximum image size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "min": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "minlength": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        },
+        "note": {
+          "type": "string"
+        },
+        "none of the above": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "object": {
+          "type": "string"
+        },
+        "all of the above": {
+          "type": "string"
+        },
+        "allow privileges": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "allow users": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "check others": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "exclude": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "item grid": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "label above field": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "no label": {
+          "type": "string"
+        },
+        "persistent": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "private": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "raw html": {
+          "type": "string"
+        },
+        "read only": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "required": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "show if": {
+          "$ref": "#/$defs/showIfFieldModifier"
+        },
+        "shuffle": {
+          "type": "boolean"
+        },
+        "under text": {
+          "type": "string"
+        },
+        "uncheck others": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "validation code": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "fields": {
+      "$comment": "Fields can be a code-reference dict, a single-field shorthand dict, or a list of strings/field objects.",
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/fieldItem"
+        },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/fieldItem"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+# Valid docassemble YAML file with a simple question
+question: What is your name?
+subquestion: Please provide your full legal name.
+fields:
+  - label: First Name
+    field: first_name
+    datatype: text
+  - label: Last Name
+    field: last_name
+    datatype: text

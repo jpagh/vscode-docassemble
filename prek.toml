@@ -1,0 +1,9 @@
+[[repos]]
+  hooks = [{ id = "oxfmt" }]
+  repo = "https://github.com/oxc-project/mirrors-oxfmt"
+  rev = "3c7999c43590548921418ba746ae49d2c0851222"
+
+[[repos]]
+  hooks = [{ id = "oxlint" }]
+  repo = "https://github.com/oxc-project/mirrors-oxlint"
+  rev = "v1.51.0"
