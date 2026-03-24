@@ -1,7 +1,7 @@
 {
   "name": "vscode-docassemble",
   "displayName": "Docassemble YAML",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
   "categories": [
     "Programming Languages"

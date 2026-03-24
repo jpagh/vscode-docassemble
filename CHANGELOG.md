@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.11] - 2026-03-24
+
+### Fixed
+
+- YAML syntax highlighting now properly resets in each block `---`
+
 ## [0.3.10] - 2025-11-24
 
 ### Added
