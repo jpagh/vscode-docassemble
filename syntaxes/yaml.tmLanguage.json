@@ -270,7 +270,7 @@
           "name": "punctuation.definition.mapping.begin.yaml"
         }
       },
-      "end": "\\}",
+      "end": "\\}|(?=^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
       "endCaptures": {
         "0": {
           "name": "punctuation.definition.mapping.end.yaml"
@@ -315,7 +315,7 @@
               "name": "punctuation.definition.key-value.begin.yaml"
             }
           },
-          "end": "(?=[},\\]])",
+          "end": "(?=[},\\]]|^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
           "name": "meta.flow-pair.explicit.yaml",
           "patterns": [
             {
@@ -334,7 +334,7 @@
                   "name": "punctuation.separator.key-value.mapping.yaml"
                 }
               },
-              "end": "(?=[},\\]])",
+              "end": "(?=[},\\]]|^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
               "patterns": [
                 {
                   "include": "#flow-value"
@@ -345,7 +345,7 @@
         },
         {
           "begin": "(?x)(?=(?:[^\\s[-?:,\\[\\]\\${}#&*!|>'\"%@`]]|[?:-][^\\s[\\[\\]{},]])([^\\s:[\\[\\]{},]]|:[^\\s[\\[\\]{},]]|\\s+(?![#\\s]))*\\s*:(\\s|$))",
-          "end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},])",
+          "end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},]|^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
           "name": "meta.flow-pair.key.yaml",
           "patterns": [
             {
@@ -359,7 +359,7 @@
                 }
               },
               "contentName": "entity.name.tag.yaml",
-              "end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},])",
+              "end": "(?x)(?=\\s*$|\\s+\\#|\\s*:(\\s|$)|\\s*:[\\[\\]{},]|\\s*[\\[\\]{},]|^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
               "name": "unquoted.plain.in.yaml"
             }
           ]
@@ -374,7 +374,7 @@
               "name": "punctuation.separator.key-value.mapping.yaml"
             }
           },
-          "end": "(?=[},\\]])",
+          "end": "(?=[},\\]]|^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
           "name": "meta.flow-pair.yaml",
           "patterns": [
             {
@@ -404,7 +404,7 @@
           "name": "punctuation.definition.string.begin.yaml"
         }
       },
-      "end": "\"",
+      "end": "\"|(?=^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
       "endCaptures": {
         "0": {
           "name": "punctuation.definition.string.end.yaml"
@@ -513,7 +513,7 @@
           "name": "punctuation.definition.sequence.begin.yaml"
         }
       },
-      "end": "\\]",
+      "end": "\\]|(?=^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
       "endCaptures": {
         "0": {
           "name": "punctuation.definition.sequence.end.yaml"
@@ -540,7 +540,7 @@
       "patterns": [
         {
           "begin": "\\G(?![},\\]])",
-          "end": "(?=[},\\]])",
+          "end": "(?=[},\\]]|^---(?:\\s|$)|^\\.\\.\\.(?:\\s|$))",
           "name": "meta.flow-pair.value.yaml",
           "patterns": [
             {
