@@ -1,9 +1,9 @@
 [[repos]]
   hooks = [{ id = "oxfmt" }]
   repo = "https://github.com/oxc-project/mirrors-oxfmt"
-  rev = "v0.42.0"
+  rev = "v0.49.0"
 
 [[repos]]
   hooks = [{ id = "oxlint" }]
   repo = "https://github.com/oxc-project/mirrors-oxlint"
-  rev = "v1.57.0"
+  rev = "v1.64.0"
