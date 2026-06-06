@@ -5,7 +5,7 @@
   "foldingStopMarker": "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})",
   "patterns": [
     {
-      "begin": "^\\s*(%)(\\s*((for)|(if)|(while)|(endfor)|(endif)|(endwhile)))?",
+      "begin": "^\\s*(%)(?!>)(\\s*((for)|(if)|(while)|(endfor)|(endif)|(endwhile)))?",
       "beginCaptures": {
         "1": {
           "name": "keyword.control"
@@ -39,12 +39,17 @@
     },
     {
       "begin": "(<%\\s)",
-      "captures": {
+      "beginCaptures": {
         "1": {
           "name": "keyword.control"
         }
       },
       "end": "(%>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "source.mako.substitution",
       "patterns": [
         {
@@ -54,12 +59,17 @@
     },
     {
       "begin": "(<%!\\s)",
-      "captures": {
+      "beginCaptures": {
         "1": {
           "name": "keyword.control"
         }
       },
       "end": "(%>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "source.mako.substitution",
       "patterns": [
         {
@@ -69,7 +79,7 @@
     },
     {
       "begin": "(<%(text)>)",
-      "captures": {
+      "beginCaptures": {
         "1": {
           "name": "keyword.control"
         },
@@ -78,12 +88,17 @@
         }
       },
       "end": "(</%(\\2)>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "source.mako.text",
       "patterns": []
     },
     {
       "begin": "(<%(doc)>)",
-      "captures": {
+      "beginCaptures": {
         "1": {
           "name": "keyword.control"
         },
@@ -92,20 +107,27 @@
         }
       },
       "end": "(</%(\\2)>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "comment.block.mako",
       "patterns": []
     },
     {
       "begin": "(\\${)",
-      "captures": {
+      "beginCaptures": {
         "1": {
-          "name": "keyword.control"
-        },
-        "2": {
           "name": "keyword.control"
         }
       },
       "end": "(})",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "source.mako.expression",
       "patterns": [
         {
@@ -115,7 +137,7 @@
     },
     {
       "begin": "(<%(def)\\S?)",
-      "captures": {
+      "beginCaptures": {
         "1": {
           "name": "keyword.control"
         },
@@ -124,6 +146,11 @@
         }
       },
       "end": "(</%(\\2)>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "source.mako.def",
       "patterns": [
         {
@@ -166,7 +193,7 @@
         },
         {
           "begin": "(>)",
-          "captures": {
+          "beginCaptures": {
             "1": {
               "name": "keyword.control"
             }
@@ -182,7 +209,7 @@
     },
     {
       "begin": "(<%(call))",
-      "captures": {
+      "beginCaptures": {
         "1": {
           "name": "keyword.control"
         },
@@ -191,6 +218,11 @@
         }
       },
       "end": "(</%(\\2)>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "source.mako.call",
       "patterns": [
         {
@@ -220,7 +252,7 @@
         },
         {
           "begin": "(>)",
-          "captures": {
+          "beginCaptures": {
             "1": {
               "name": "keyword.control"
             }
@@ -310,7 +342,7 @@
     },
     {
       "begin": "(<%([a-zA-Z0-9:_]+))",
-      "captures": {
+      "beginCaptures": {
         "1": {
           "name": "keyword.control"
         },
@@ -319,6 +351,11 @@
         }
       },
       "end": "(</%(\\2)>|\\/>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
       "name": "source.mako.genericcall",
       "patterns": [
         {
@@ -348,7 +385,7 @@
         },
         {
           "begin": "(>)",
-          "captures": {
+          "beginCaptures": {
             "1": {
               "name": "keyword.control"
             }

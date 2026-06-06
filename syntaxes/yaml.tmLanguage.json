@@ -62,7 +62,12 @@
         {
           "begin": "^(?=([ ]+)(?! ))",
           "end": "^(?!\\1|\\s*$)",
-          "name": "source.mako"
+          "name": "source.mako",
+          "patterns": [
+            {
+              "include": "source.mako"
+            }
+          ]
         }
       ]
     },
@@ -599,10 +604,13 @@
         },
         {
           "begin": "(?=.*:)(\\$\\{)",
-          "captures": {
+          "beginCaptures": {
             "1": { "name": "keyword.control" }
           },
           "end": "(\\})",
+          "endCaptures": {
+            "1": { "name": "keyword.control" }
+          },
           "name": "unquoted.plain.out.yaml entity.name.tag.yaml source.mako.expression",
           "patterns": [
             {
