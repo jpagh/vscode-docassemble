@@ -1,5 +1,30 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Optional `docassemble-lsp` integration over stdio.
+- Commands to restart the language server and show the language server output.
+- A status bar indicator and setup-help command for optional language server discovery, troubleshooting, and restarting.
+- Settings for a custom full language-server command, environment variables, and protocol tracing.
+- Extension-host smoke tests covering disabled, missing-command, and configured-command startup paths.
+- Extension-host coverage for Enter-triggered LSP on-type formatting.
+- A direct `docassemble-lsp` smoke test script and `prek` local hook for system-level validation.
+
+### Changed
+
+- Raised the minimum supported VS Code version for the new extension runtime.
+- Docassemble documents now default to this extension as their formatter and enable `editor.formatOnType` unless the user overrides those settings.
+
+### Added
+
+- Python syntax highlighting for `show if` values in both block-scalar (`show if: |`) and inline (`show if: <expr>`) forms.
+
+### Fixed
+
+- Added client-side debug logging for document selector matches, Enter/newline handling, and `textDocument/onTypeFormatting` request/response flow.
+
 ## [0.3.11] - 2026-03-24
 
 ### Fixed

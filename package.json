@@ -1,106 +1,179 @@
 {
-  "name": "vscode-docassemble",
-  "displayName": "Docassemble YAML",
-  "version": "0.3.11",
-  "description": "Syntax Highlighting for Docassemble YAML (incl. Python, Mako, and Jinja)",
-  "categories": [
-    "Programming Languages"
-  ],
-  "keywords": [
-    "docassemble",
-    "yaml"
-  ],
-  "license": "Apache-2.0",
-  "author": "Jack Adamson",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jpagh/vscode-docassemble"
-  },
-  "publisher": "jackadamson",
-  "contributes": {
-    "languages": [
-      {
-        "id": "docassemble",
-        "aliases": [
-          "Docassemble YAML",
-          "docassemble-yaml"
-        ],
-        "extensions": [
-          ".yml"
-        ],
-        "configuration": "./language-configuration/language-configuration-yaml.json"
-      },
-      {
-        "id": "mako",
-        "aliases": [
-          "Mako",
-          "mako"
-        ],
-        "extensions": [],
-        "configuration": "./language-configuration/language-configuration-mako.json"
-      },
-      {
-        "id": "jinja",
-        "aliases": [
-          "Jinja",
-          "jinja"
-        ],
-        "extensions": [],
-        "configuration": "./language-configuration/language-configuration-jinja.json"
-      }
-    ],
-    "grammars": [
-      {
-        "language": "docassemble",
-        "scopeName": "source.docassemble.yaml",
-        "path": "./syntaxes/yaml.tmLanguage.json"
-      },
-      {
-        "language": "jinja",
-        "scopeName": "source.jinja",
-        "path": "./syntaxes/jinja.tmLanguage.json"
-      },
-      {
-        "language": "mako",
-        "scopeName": "source.mako",
-        "path": "./syntaxes/mako.tmLanguage.json"
-      },
-      {
-        "injectTo": [
-          "source.docassemble.yaml"
-        ],
-        "scopeName": "python.injection",
-        "path": "./syntaxes/python-injection.json"
-      },
-      {
-        "injectTo": [
-          "source.docassemble.yaml"
-        ],
-        "scopeName": "mako.injection",
-        "path": "./syntaxes/mako-injection.json"
-      },
-      {
-        "injectTo": [
-          "source.docassemble.yaml"
-        ],
-        "scopeName": "jinja.injection",
-        "path": "./syntaxes/jinja-injection.json"
-      }
-    ]
-  },
-  "icon": "icon.png",
-  "engines": {
-    "vscode": "^1.40.0"
-  },
-  "__metadata": {
-    "id": "517a3d61-d626-45e9-a011-03be13277f9a",
-    "publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
-    "publisherDisplayName": "Jack Adamson",
-    "targetPlatform": "undefined",
-    "updated": false,
-    "isPreReleaseVersion": false,
-    "hasPreReleaseVersion": false,
-    "installedTimestamp": 1707172694885,
-    "pinned": false
-  }
+	"name": "vscode-docassemble",
+	"displayName": "Docassemble YAML",
+	"version": "0.3.11",
+	"description": "Syntax highlighting for Docassemble YAML with optional docassemble-lsp integration.",
+	"main": "./dist/extension.js",
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
+		"docassemble",
+		"yaml"
+	],
+	"license": "Apache-2.0",
+	"author": "Jack Adamson",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jpagh/vscode-docassemble"
+	},
+	"publisher": "jackadamson",
+	"scripts": {
+		"build": "tsc -p ./",
+		"watch": "tsc -w -p ./",
+		"test": "npm run build && node ./dist/test/runTest.js",
+		"test:real-lsp": "node ./scripts/real-lsp-smoke.mjs",
+		"test:real-lsp-extension": "npm run build && DOCASSEMBLE_LSP_ENABLE_REAL_TEST=1 node ./dist/test/runTest.js"
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "docassemble.lsp.restart",
+				"title": "Docassemble: Restart Language Server"
+			},
+			{
+				"command": "docassemble.lsp.showOutput",
+				"title": "Docassemble: Show Language Server Output"
+			},
+			{
+				"command": "docassemble.lsp.showSetupHelp",
+				"title": "Docassemble: Show Language Server Setup Help"
+			}
+		],
+		"configuration": {
+			"title": "Docassemble",
+			"properties": {
+				"docassemble.lsp.enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "Start the optional docassemble-lsp language server when a Docassemble document opens and a server command can be resolved."
+				},
+				"docassemble.lsp.command": {
+					"type": "string",
+					"default": "docassemble-lsp lsp",
+					"markdownDescription": "Full command line used to start the optional language server. Examples: `docassemble-lsp lsp` or `/path/to/venv/bin/python -m docassemble_lsp lsp`."
+				},
+				"docassemble.lsp.env": {
+					"type": "object",
+					"default": {},
+					"additionalProperties": {
+						"type": "string"
+					},
+					"description": "Extra environment variables merged into the server process environment."
+				},
+				"docassemble.lsp.trace.server": {
+					"type": "string",
+					"default": "off",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"description": "Trace level for the language client/server protocol log."
+				}
+			}
+		},
+		"configurationDefaults": {
+			"[docassemble]": {
+				"editor.defaultFormatter": "jackadamson.vscode-docassemble",
+				"editor.formatOnType": true,
+				"editor.insertSpaces": true,
+				"editor.tabSize": 2
+			}
+		},
+		"languages": [
+			{
+				"id": "docassemble",
+				"aliases": [
+					"Docassemble YAML",
+					"docassemble-yaml"
+				],
+				"extensions": [
+					".yml"
+				],
+				"configuration": "./language-configuration/language-configuration-yaml.json"
+			},
+			{
+				"id": "mako",
+				"aliases": [
+					"Mako",
+					"mako"
+				],
+				"extensions": [],
+				"configuration": "./language-configuration/language-configuration-mako.json"
+			},
+			{
+				"id": "jinja",
+				"aliases": [
+					"Jinja",
+					"jinja"
+				],
+				"extensions": [],
+				"configuration": "./language-configuration/language-configuration-jinja.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "docassemble",
+				"scopeName": "source.docassemble.yaml",
+				"path": "./syntaxes/yaml.tmLanguage.json"
+			},
+			{
+				"language": "jinja",
+				"scopeName": "source.jinja",
+				"path": "./syntaxes/jinja.tmLanguage.json"
+			},
+			{
+				"language": "mako",
+				"scopeName": "source.mako",
+				"path": "./syntaxes/mako.tmLanguage.json"
+			},
+			{
+				"injectTo": [
+					"source.docassemble.yaml"
+				],
+				"scopeName": "python.injection",
+				"path": "./syntaxes/python-injection.json"
+			},
+			{
+				"injectTo": [
+					"source.docassemble.yaml"
+				],
+				"scopeName": "mako.injection",
+				"path": "./syntaxes/mako-injection.json"
+			},
+			{
+				"injectTo": [
+					"source.docassemble.yaml"
+				],
+				"scopeName": "jinja.injection",
+				"path": "./syntaxes/jinja-injection.json"
+			}
+		]
+	},
+	"icon": "icon.png",
+	"engines": {
+		"vscode": "^1.93.0"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^9.0.1"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.30",
+		"@types/vscode": "^1.93.0",
+		"@vscode/test-electron": "^2.5.2",
+		"typescript": "^5.8.3"
+	},
+	"__metadata": {
+		"id": "517a3d61-d626-45e9-a011-03be13277f9a",
+		"publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
+		"publisherDisplayName": "Jack Adamson",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1707172694885,
+		"pinned": false,
+		"size": 2511695411
+	}
 }

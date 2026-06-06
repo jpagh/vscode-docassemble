@@ -1,0 +1,6 @@
+metadata:
+  title: Real LSP smoke test
+---
+mandatory: True
+question: |
+  Hello from the Docassemble smoke test.
