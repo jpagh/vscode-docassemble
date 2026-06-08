@@ -4,6 +4,7 @@ import {
   LanguageClient,
   RevealOutputChannelOn,
   ServerOptions,
+  State as ClientState,
   Trace,
 } from "vscode-languageclient/node";
 
@@ -38,6 +39,7 @@ class DocassembleLspController {
   private lifecycle: Promise<void> = Promise.resolve();
   private restartTimer: NodeJS.Timeout | undefined;
   private fileWatchers: vscode.Disposable[] = [];
+  private linkRegistration: vscode.Disposable | undefined;
 
   public constructor(
     private readonly output: vscode.OutputChannel,
@@ -119,6 +121,9 @@ class DocassembleLspController {
           { language: "docassemble", scheme: "untitled" },
         ],
         middleware: {
+          provideDocumentLinks: async () => {
+            return [];
+          },
           provideOnTypeFormattingEdits: async (document, position, ch, options, token, next) => {
             this.logOnTypeFormattingRequest(document, position, ch);
             const edits = await next(document, position, ch, options, token);
@@ -141,6 +146,63 @@ class DocassembleLspController {
       this.setServerState("running");
       this.log(`Language server started with command: ${resolvedCommand.command}`);
 
+      // Register a local DocumentLinkProvider so VS Code draws persistent
+      // underlines for module/include/static/template references. The LSP client
+      // auto-registers a provider too, but VS Code only renders underlines from
+      // local providers — not from LSP-delegated ones.
+      this.linkRegistration = vscode.languages.registerDocumentLinkProvider(
+        { language: "docassemble", scheme: "file" },
+        {
+          provideDocumentLinks: async (document) => {
+            if (!this.client || this.client.state !== ClientState.Running) {
+              return [];
+            }
+            const params = {
+              textDocument: { uri: document.uri.toString() },
+            };
+            type LinkItem = {
+              range: {
+                start: { line: number; character: number };
+                end: { line: number; character: number };
+              };
+              target?: string;
+            };
+
+            try {
+              const links = await this.client.sendRequest<LinkItem[] | null>(
+                "textDocument/documentLink",
+                params,
+              );
+              if (!links) {
+                return [];
+              }
+              return links
+                .filter((l) => {
+                  const sameLine = l.range.start.line === l.range.end.line;
+                  const sameChar = l.range.start.character === l.range.end.character;
+                  return !(sameLine && sameChar);
+                })
+                .map(
+                  (l) =>
+                    new vscode.DocumentLink(
+                      new vscode.Range(
+                        l.range.start.line,
+                        l.range.start.character,
+                        l.range.end.line,
+                        l.range.end.character,
+                      ),
+                      l.target ? vscode.Uri.parse(l.target) : undefined,
+                    ),
+                );
+            } catch (error) {
+              const message = error instanceof Error ? error.message : String(error);
+              this.log(`Document link provider failed: ${message}`);
+              return [];
+            }
+          },
+        },
+      );
+
       // Set up VS Code file watchers that send workspace/didChangeWatchedFiles to the server
       this.registerFileWatchers(client);
     } catch (error) {
@@ -161,6 +223,11 @@ class DocassembleLspController {
     }
 
     this.disposeFileWatchers();
+
+    if (this.linkRegistration) {
+      this.linkRegistration.dispose();
+      this.linkRegistration = undefined;
+    }
 
     const client = this.client;
     this.client = undefined;
