@@ -28,32 +28,32 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "docassemble.lsp.restart",
+				"command": "docassemble-lsp.restart",
 				"title": "Docassemble: Restart Language Server"
 			},
 			{
-				"command": "docassemble.lsp.showOutput",
+				"command": "docassemble-lsp.showOutput",
 				"title": "Docassemble: Show Language Server Output"
 			},
 			{
-				"command": "docassemble.lsp.showSetupHelp",
+				"command": "docassemble-lsp.showSetupHelp",
 				"title": "Docassemble: Show Language Server Setup Help"
 			}
 		],
 		"configuration": {
 			"title": "Docassemble",
 			"properties": {
-				"docassemble.lsp.enabled": {
+				"docassemble-lsp.enabled": {
 					"type": "boolean",
 					"default": true,
 					"description": "Start the optional docassemble-lsp language server when a Docassemble document opens and a server command can be resolved."
 				},
-				"docassemble.lsp.command": {
+				"docassemble-lsp.command": {
 					"type": "string",
 					"default": "docassemble-lsp lsp",
 					"markdownDescription": "Full command line used to start the optional language server. Examples: `docassemble-lsp lsp` or `/path/to/venv/bin/python -m docassemble_lsp lsp`."
 				},
-				"docassemble.lsp.env": {
+				"docassemble-lsp.env": {
 					"type": "object",
 					"default": {},
 					"additionalProperties": {
@@ -61,7 +61,7 @@
 					},
 					"description": "Extra environment variables merged into the server process environment."
 				},
-				"docassemble.lsp.trace.server": {
+				"docassemble-lsp.trace.server": {
 					"type": "string",
 					"default": "off",
 					"enum": [

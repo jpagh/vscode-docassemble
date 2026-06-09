@@ -8,7 +8,7 @@ import {
   Trace,
 } from "vscode-languageclient/node";
 
-const CONFIG_SECTION = "docassemble.lsp";
+const CONFIG_SECTION = "docassemble-lsp";
 const DIAGNOSTIC_LANGUAGE_IDS = new Set(["docassemble", "yaml"]);
 
 export type ServerState = "idle" | "disabled" | "missing" | "running" | "error" | "stopped";
@@ -86,7 +86,7 @@ class DocassembleLspController {
       this.setServerState("disabled");
       this.lastResolvedCommand = undefined;
       this.lastError = undefined;
-      this.log("Language server startup skipped because docassemble.lsp.enabled is false.");
+      this.log("Language server startup skipped because docassemble-lsp.enabled is false.");
       return;
     }
 
@@ -247,7 +247,7 @@ class DocassembleLspController {
   public async showSetupHelp(): Promise<void> {
     this.output.appendLine("[docassemble-lsp] Setup help");
     this.output.appendLine(
-      "[docassemble-lsp] Install `docassemble-lsp` on your PATH, or set `docassemble.lsp.command` to the full command you want VS Code to run.",
+      "[docassemble-lsp] Install `docassemble-lsp` on your PATH, or set `docassemble-lsp.command` to the full command you want VS Code to run.",
     );
     this.output.appendLine("[docassemble-lsp] Default command: docassemble-lsp lsp");
     this.output.appendLine(
@@ -258,13 +258,13 @@ class DocassembleLspController {
     );
 
     const selection = await vscode.window.showInformationMessage(
-      "Install docassemble-lsp on PATH or configure docassemble.lsp.command.",
+      "Install docassemble-lsp on PATH or configure docassemble-lsp.command.",
       "Open Settings",
       "Show Output",
     );
 
     if (selection === "Open Settings") {
-      await vscode.commands.executeCommand("workbench.action.openSettings", "docassemble.lsp");
+      await vscode.commands.executeCommand("workbench.action.openSettings", "docassemble-lsp");
       return;
     }
 
@@ -339,7 +339,7 @@ class DocassembleLspController {
       this.lastResolvedCommand = undefined;
       this.lastError = undefined;
       this.setServerState("missing");
-      this.log("Language server startup skipped because docassemble.lsp.command is empty.");
+      this.log("Language server startup skipped because docassemble-lsp.command is empty.");
       return undefined;
     }
 
@@ -521,34 +521,34 @@ class DocassembleLspController {
         this.statusBar.tooltip = this.lastResolvedCommand
           ? `${this.lastResolvedCommand} — click to restart`
           : "Docassemble LSP: click to restart";
-        this.statusBar.command = "docassemble.lsp.restart";
+        this.statusBar.command = "docassemble-lsp.restart";
         break;
       case "missing":
         this.statusBar.text = "$(warning) Docassemble LSP";
         this.statusBar.tooltip = "No Docassemble LSP command is configured. Click for setup help.";
-        this.statusBar.command = "docassemble.lsp.showSetupHelp";
+        this.statusBar.command = "docassemble-lsp.showSetupHelp";
         break;
       case "disabled":
         this.statusBar.text = "$(circle-slash) Docassemble LSP";
         this.statusBar.tooltip = "Docassemble language server is disabled in settings.";
-        this.statusBar.command = "docassemble.lsp.showSetupHelp";
+        this.statusBar.command = "docassemble-lsp.showSetupHelp";
         break;
       case "error":
         this.statusBar.text = "$(error) Docassemble LSP";
         this.statusBar.tooltip = this.lastError
           ? `Docassemble language server failed to start: ${this.lastError}`
           : "Docassemble language server failed to start.";
-        this.statusBar.command = "docassemble.lsp.showOutput";
+        this.statusBar.command = "docassemble-lsp.showOutput";
         break;
       case "stopped":
         this.statusBar.text = "$(debug-stop) Docassemble LSP";
         this.statusBar.tooltip = "Docassemble language server is stopped.";
-        this.statusBar.command = "docassemble.lsp.restart";
+        this.statusBar.command = "docassemble-lsp.restart";
         break;
       default:
         this.statusBar.text = "$(sync~spin) Docassemble LSP";
         this.statusBar.tooltip = "Docassemble language server is starting.";
-        this.statusBar.command = "docassemble.lsp.showOutput";
+        this.statusBar.command = "docassemble-lsp.showOutput";
         break;
     }
 
@@ -568,13 +568,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<Docass
   context.subscriptions.push(
     output,
     statusBar,
-    vscode.commands.registerCommand("docassemble.lsp.restart", async () => {
+    vscode.commands.registerCommand("docassemble-lsp.restart", async () => {
       await controller.restart();
     }),
-    vscode.commands.registerCommand("docassemble.lsp.showOutput", () => {
+    vscode.commands.registerCommand("docassemble-lsp.showOutput", () => {
       controller.showOutput();
     }),
-    vscode.commands.registerCommand("docassemble.lsp.showSetupHelp", async () => {
+    vscode.commands.registerCommand("docassemble-lsp.showSetupHelp", async () => {
       await controller.showSetupHelp();
     }),
     vscode.workspace.onDidChangeConfiguration(async (event) => {

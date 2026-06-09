@@ -32,7 +32,7 @@ export async function runTests(): Promise<void> {
     {
       name: "defaults docassemble indentation to 2 spaces",
       run: async () => {
-        await updateConfiguration("docassemble.lsp.enabled", false);
+        await updateConfiguration("docassemble-lsp.enabled", false);
 
         const document = await vscode.workspace.openTextDocument({
           language: "docassemble",
@@ -47,7 +47,7 @@ export async function runTests(): Promise<void> {
     {
       name: "stays healthy when the language server is disabled",
       run: async () => {
-        await updateConfiguration("docassemble.lsp.enabled", false);
+        await updateConfiguration("docassemble-lsp.enabled", false);
 
         const api = await getApi();
 
@@ -58,8 +58,8 @@ export async function runTests(): Promise<void> {
     {
       name: "reports an empty server command without failing activation",
       run: async () => {
-        await updateConfiguration("docassemble.lsp.enabled", true);
-        await updateConfiguration("docassemble.lsp.command", "");
+        await updateConfiguration("docassemble-lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.command", "");
 
         const api = await getApi();
         await api.restart();
@@ -71,9 +71,9 @@ export async function runTests(): Promise<void> {
     {
       name: "starts with a configured command",
       run: async () => {
-        await updateConfiguration("docassemble.lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration(
-          "docassemble.lsp.command",
+          "docassemble-lsp.command",
           `${quoteForShell(process.execPath)} ${quoteForShell(mockServerPath())}`,
         );
 
@@ -89,12 +89,12 @@ export async function runTests(): Promise<void> {
       run: async () => {
         const logPath = path.join(os.tmpdir(), `docassemble-mock-lsp-${Date.now()}.log`);
 
-        await updateConfiguration("docassemble.lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration(
-          "docassemble.lsp.command",
+          "docassemble-lsp.command",
           `${quoteForShell(process.execPath)} ${quoteForShell(mockServerPath())}`,
         );
-        await updateConfiguration("docassemble.lsp.env", { DOCASSEMBLE_MOCK_LOG: logPath });
+        await updateConfiguration("docassemble-lsp.env", { DOCASSEMBLE_MOCK_LOG: logPath });
         await updateConfiguration("editor.formatOnType", true);
         await updateLanguageConfiguration("docassemble", {
           "editor.defaultFormatter": EXTENSION_ID,
@@ -122,9 +122,9 @@ export async function runTests(): Promise<void> {
     {
       name: "clears docassemble diagnostics after switching language mode to yaml",
       run: async () => {
-        await updateConfiguration("docassemble.lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration(
-          "docassemble.lsp.command",
+          "docassemble-lsp.command",
           `${quoteForShell(process.execPath)} ${quoteForShell(mockServerPath())}`,
         );
 
@@ -159,7 +159,7 @@ export async function runTests(): Promise<void> {
         await resetConfiguration();
 
         const api = await getApi();
-        await updateConfiguration("docassemble.lsp.command", "docassemble-lsp lsp");
+        await updateConfiguration("docassemble-lsp.command", "docassemble-lsp lsp");
         await api.restart();
 
         const state = await waitForState(api, "running");
@@ -223,10 +223,10 @@ async function updateConfiguration<T>(section: string, value: T): Promise<void> 
 }
 
 async function resetConfiguration(): Promise<void> {
-  await updateConfiguration("docassemble.lsp.enabled", undefined);
-  await updateConfiguration("docassemble.lsp.command", undefined);
-  await updateConfiguration("docassemble.lsp.env", undefined);
-  await updateConfiguration("docassemble.lsp.trace.server", undefined);
+  await updateConfiguration("docassemble-lsp.enabled", undefined);
+  await updateConfiguration("docassemble-lsp.command", undefined);
+  await updateConfiguration("docassemble-lsp.env", undefined);
+  await updateConfiguration("docassemble-lsp.trace.server", undefined);
   await updateConfiguration("editor.formatOnType", undefined);
   await updateConfiguration("editor.insertSpaces", undefined);
   await updateConfiguration("editor.tabSize", undefined);

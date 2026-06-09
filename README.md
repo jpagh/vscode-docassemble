@@ -26,16 +26,16 @@ If you prefer to use a specific Python interpreter or virtual environment, point
 
 The extension contributes these settings:
 
-- `docassemble.lsp.enabled`: enable or disable the optional language server.
-- `docassemble.lsp.command`: full command line to launch. Defaults to `docassemble-lsp lsp`.
-- `docassemble.lsp.env`: extra environment variables for the server process.
-- `docassemble.lsp.trace.server`: protocol trace level for debugging. When set to `messages` or `verbose`, the extension also logs client-side selector, Enter/newline, and on-type formatting diagnostics to the Docassemble Language Server output channel.
+- `docassemble-lsp.enabled`: enable or disable the optional language server.
+- `docassemble-lsp.command`: full command line to launch. Defaults to `docassemble-lsp lsp`.
+- `docassemble-lsp.env`: extra environment variables for the server process.
+- `docassemble-lsp.trace.server`: protocol trace level for debugging. When set to `messages` or `verbose`, the extension also logs client-side selector, Enter/newline, and on-type formatting diagnostics to the Docassemble Language Server output channel.
 
 Example using the standard installed command:
 
 ```json
 {
-	"docassemble.lsp.command": "docassemble-lsp lsp"
+	"docassemble-lsp.command": "docassemble-lsp lsp"
 }
 ```
 
@@ -43,7 +43,7 @@ Example using a specific Python interpreter:
 
 ```json
 {
-	"docassemble.lsp.command": "/path/to/venv/bin/python -m docassemble_lsp lsp"
+	"docassemble-lsp.command": "/path/to/venv/bin/python -m docassemble_lsp lsp"
 }
 ```
 
@@ -51,7 +51,7 @@ Example using a local checkout through `uv run`:
 
 ```json
 {
-	"docassemble.lsp.command": "uv run --project ~/Projects/docassemble-lsp docassemble-lsp lsp"
+	"docassemble-lsp.command": "uv run --project ~/Projects/docassemble-lsp docassemble-lsp lsp"
 }
 ```
 
