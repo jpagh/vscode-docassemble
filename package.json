@@ -7,6 +7,7 @@
 	"categories": [
 		"Programming Languages"
 	],
+
 	"keywords": [
 		"docassemble",
 		"yaml"
@@ -19,7 +20,8 @@
 	},
 	"publisher": "jackadamson",
 	"scripts": {
-		"build": "tsc -p ./",
+		"bundle-server": "node scripts/bundle-server.mjs",
+		"build": "npm run bundle-server && tsc -p ./",
 		"watch": "tsc -w -p ./",
 		"test": "npm run build && node ./dist/test/runTest.js",
 		"test:real-lsp": "node ./scripts/real-lsp-smoke.mjs",
@@ -48,18 +50,38 @@
 					"default": true,
 					"description": "Start the optional docassemble-lsp language server when a Docassemble document opens and a server command can be resolved."
 				},
+				"docassemble-lsp.importStrategy": {
+					"type": "string",
+					"default": "useBundled",
+					"enum": [
+						"useBundled",
+						"fromEnvironment"
+					],
+					"markdownDescription": "How to resolve the docassemble-lsp server.\n- `useBundled` — run the server shipped in the extension via the Python interpreter.\n- `fromEnvironment` — run the server from the Python environment. If `docassemble-lsp.command` is set, runs it as a shell command; otherwise runs `python -m docassemble_lsp lsp`."
+				},
 				"docassemble-lsp.command": {
 					"type": "string",
-					"default": "docassemble-lsp lsp",
-					"markdownDescription": "Full command line used to start the optional language server. Examples: `docassemble-lsp lsp` or `/path/to/venv/bin/python -m docassemble_lsp lsp`."
+					"default": "",
+					"markdownDescription": "Shell command for running the server when `importStrategy` is `fromEnvironment`. Examples:\n- `docassemble-lsp lsp`\n- `/path/to/venv/bin/python -m docassemble_lsp lsp`\n- `uv run --project /path docassemble-lsp lsp`\n\nLeave empty for default behaviour (`python -m docassemble_lsp lsp`)."
 				},
-				"docassemble-lsp.env": {
-					"type": "object",
-					"default": {},
-					"additionalProperties": {
+				"docassemble-lsp.interpreter": {
+					"type": "array",
+					"items": {
 						"type": "string"
 					},
-					"description": "Extra environment variables merged into the server process environment."
+					"default": [],
+					"markdownDescription": "Python interpreter to use for running the server. If empty, uses the Python extension's active environment. Example: `[\"/path/to/python3\"]`."
+				},
+				"docassemble-lsp.showNotifications": {
+					"type": "string",
+					"default": "off",
+					"enum": [
+						"off",
+						"onError",
+						"onWarning",
+						"always"
+					],
+					"markdownDescription": "Controls when notifications are shown for server errors and warnings."
 				},
 				"docassemble-lsp.trace.server": {
 					"type": "string",
@@ -69,7 +91,15 @@
 						"messages",
 						"verbose"
 					],
-					"description": "Trace level for the language client/server protocol log."
+					"markdownDescription": "Trace level for the language client/server protocol log."
+				},
+				"docassemble-lsp.env": {
+					"type": "object",
+					"default": {},
+					"additionalProperties": {
+						"type": "string"
+					},
+					"description": "Extra environment variables merged into the server process environment."
 				}
 			}
 		},
@@ -156,12 +186,13 @@
 		"vscode": "^1.93.0"
 	},
 	"dependencies": {
+		"@vscode/python-extension": "^1.0.5",
 		"vscode-languageclient": "^9.0.1"
 	},
 	"devDependencies": {
 		"@types/node": "^22.15.30",
 		"@types/vscode": "^1.93.0",
-		"@vscode/test-electron": "^2.5.2",
+		"@vscode/test-electron": "^2.3.10",
 		"typescript": "^5.8.3"
 	},
 	"__metadata": {

@@ -1,5 +1,10 @@
+import { execSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import * as path from "path";
 import * as vscode from "vscode";
 import {
+  CloseAction,
+  ErrorAction,
   FileChangeType,
   LanguageClient,
   RevealOutputChannelOn,
@@ -7,6 +12,7 @@ import {
   State as ClientState,
   Trace,
 } from "vscode-languageclient/node";
+import { PythonExtension } from "@vscode/python-extension";
 
 const CONFIG_SECTION = "docassemble-lsp";
 const DIAGNOSTIC_LANGUAGE_IDS = new Set(["docassemble", "yaml"]);
@@ -28,7 +34,10 @@ export type DocassembleExtensionApi = {
 
 type ResolvedCommand = {
   command: string;
+  args: string[];
   env: NodeJS.ProcessEnv;
+  display: string;
+  shell?: boolean;
 };
 
 class DocassembleLspController {
@@ -40,11 +49,14 @@ class DocassembleLspController {
   private restartTimer: NodeJS.Timeout | undefined;
   private fileWatchers: vscode.Disposable[] = [];
   private linkRegistration: vscode.Disposable | undefined;
+  private readonly bundledLspVersion: string | undefined;
 
   public constructor(
+    private readonly context: vscode.ExtensionContext,
     private readonly output: vscode.OutputChannel,
     private readonly statusBar: vscode.StatusBarItem,
   ) {
+    this.bundledLspVersion = this.readBundledLspVersion();
     this.updateStatusBar();
   }
 
@@ -70,7 +82,12 @@ class DocassembleLspController {
   public async stop(): Promise<void> {
     this.cancelScheduledRestart();
     await this.enqueue(async () => {
-      await this.stopInternal();
+      try {
+        await this.stopInternal();
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        this.log(`Server stop failed: ${message}`);
+      }
     });
   }
 
@@ -90,7 +107,21 @@ class DocassembleLspController {
       return;
     }
 
-    const resolvedCommand = this.resolveCommand(config);
+    this.log(`Extension version: ${this.context.extension.packageJSON.version}`);
+    if (this.bundledLspVersion) {
+      this.log(`Bundled docassemble-lsp version: ${this.bundledLspVersion}`);
+    }
+
+    let resolvedCommand: ResolvedCommand | undefined;
+    try {
+      resolvedCommand = await this.resolveCommand(config);
+    } catch (error) {
+      this.setServerState("error");
+      const message = error instanceof Error ? error.message : String(error);
+      this.lastError = message;
+      this.log(`Language server command resolution failed: ${message}`);
+      return;
+    }
     if (!resolvedCommand) {
       this.setServerState("missing");
       this.log(
@@ -99,15 +130,20 @@ class DocassembleLspController {
       return;
     }
 
-    this.lastResolvedCommand = resolvedCommand.command;
+    this.lastResolvedCommand = resolvedCommand.display;
     this.lastError = undefined;
+
+    const importStrategy = config.get<string>("importStrategy", "useBundled");
+    this.log(
+      `Starting server (${resolvedCommand.shell ? "command" : importStrategy}): ${resolvedCommand.display}`,
+    );
 
     const serverOptions: ServerOptions = {
       command: resolvedCommand.command,
-      args: [],
+      args: resolvedCommand.args,
       options: {
         env: resolvedCommand.env,
-        shell: true,
+        shell: resolvedCommand.shell,
       },
     };
 
@@ -116,6 +152,10 @@ class DocassembleLspController {
       "Docassemble Language Server",
       serverOptions,
       {
+        errorHandler: {
+          error: () => ({ action: ErrorAction.Shutdown }),
+          closed: () => ({ action: CloseAction.DoNotRestart }),
+        },
         documentSelector: [
           { language: "docassemble", scheme: "file" },
           { language: "docassemble", scheme: "untitled" },
@@ -231,11 +271,21 @@ class DocassembleLspController {
 
     const client = this.client;
     this.client = undefined;
+
     try {
       await client.stop(2000);
-    } catch {
-      this.log("Language server stop timed out; proceeding with forced shutdown.");
+    } catch (error) {
+      // Client may be in Starting/StartFailed state where stop() rejects.
+      // Clean up with dispose() instead — it may also throw but we can ignore it.
+      const message = error instanceof Error ? error.message : String(error);
+      this.log(`Language server stop failed (${message}); disposing.`);
+      try {
+        client.dispose();
+      } catch {
+        // dispose also failed — client is already in a terminal state, nothing to do.
+      }
     }
+
     this.setServerState("stopped");
     this.log("Language server stopped.");
   }
@@ -247,18 +297,20 @@ class DocassembleLspController {
   public async showSetupHelp(): Promise<void> {
     this.output.appendLine("[docassemble-lsp] Setup help");
     this.output.appendLine(
-      "[docassemble-lsp] Install `docassemble-lsp` on your PATH, or set `docassemble-lsp.command` to the full command you want VS Code to run.",
-    );
-    this.output.appendLine("[docassemble-lsp] Default command: docassemble-lsp lsp");
-    this.output.appendLine(
-      "[docassemble-lsp] Example command override: /path/to/venv/bin/python -m docassemble_lsp lsp",
+      "[docassemble-lsp] Two server strategies, configured via docassemble-lsp.importStrategy:",
     );
     this.output.appendLine(
-      "[docassemble-lsp] Example uv project override: uv run --project /path/to/docassemble-lsp docassemble-lsp lsp",
+      '[docassemble-lsp]   "useBundled" (default) — runs the server shipped in the extension via the Python interpreter',
+    );
+    this.output.appendLine(
+      '[docassemble-lsp]   "fromEnvironment" — runs "python -m docassemble_lsp lsp", or the docassemble-lsp.command string if set',
+    );
+    this.output.appendLine(
+      "[docassemble-lsp] Set docassemble-lsp.interpreter to override the Python interpreter used for either strategy.",
     );
 
     const selection = await vscode.window.showInformationMessage(
-      "Install docassemble-lsp on PATH or configure docassemble-lsp.command.",
+      "Configure docassemble-lsp importStrategy, command, or interpreter.",
       "Open Settings",
       "Show Output",
     );
@@ -281,7 +333,11 @@ class DocassembleLspController {
     this.cancelScheduledRestart();
     this.restartTimer = setTimeout(() => {
       this.restartTimer = undefined;
-      void this.restart();
+      this.restart().catch((error) => {
+        this.log(
+          `Configuration restart failed: ${error instanceof Error ? error.message : String(error)}`,
+        );
+      });
     }, 150);
   }
 
@@ -327,26 +383,113 @@ class DocassembleLspController {
     );
   }
 
-  private resolveCommand(config: vscode.WorkspaceConfiguration): ResolvedCommand | undefined {
-    const configuredEnv = config.get<Record<string, string>>("env", {});
+  private async resolveCommand(
+    config: vscode.WorkspaceConfiguration,
+  ): Promise<ResolvedCommand | undefined> {
     const resolvedEnv = {
       ...process.env,
-      ...configuredEnv,
+      ...config.get<Record<string, string>>("env", {}),
     };
 
-    const configuredCommand = config.get<string>("command", "docassemble-lsp lsp").trim();
-    if (!configuredCommand) {
-      this.lastResolvedCommand = undefined;
-      this.lastError = undefined;
-      this.setServerState("missing");
-      this.log("Language server startup skipped because docassemble-lsp.command is empty.");
-      return undefined;
+    const importStrategy = config.get<string>("importStrategy", "useBundled");
+    const configuredCommand = config.get<string>("command", "").trim();
+
+    if (importStrategy === "fromEnvironment" && configuredCommand) {
+      return {
+        command: configuredCommand,
+        args: [],
+        env: resolvedEnv,
+        display: configuredCommand,
+        shell: true,
+      };
+    }
+
+    const configuredInterpreter = config.get<string[]>("interpreter", []);
+    let interpreter: string;
+    if (configuredInterpreter.length > 0) {
+      interpreter = configuredInterpreter[0];
+    } else {
+      try {
+        const pythonApi = await PythonExtension.api();
+        const envPath = pythonApi.environments.getActiveEnvironmentPath();
+        const environment = await pythonApi.environments.resolveEnvironment(envPath);
+        interpreter = environment?.executable?.uri?.fsPath ?? "python3";
+      } catch {
+        interpreter = "python3";
+      }
+    }
+
+    // Check that the interpreter actually exists before starting
+    if (interpreter === "python3" || interpreter === "python" || interpreter === "py") {
+      if (!this.commandExists(interpreter)) {
+        this.setServerState("missing");
+        this.log(
+          `Python interpreter "${interpreter}" not found on PATH. ` +
+            "Install Python or add it to your PATH, or install the ms-python.python extension.",
+        );
+        return undefined;
+      }
+    } else {
+      // Full path — check file exists
+      if (!(await this.fileExists(interpreter))) {
+        this.setServerState("missing");
+        this.log(`Python interpreter not found at "${interpreter}".`);
+        return undefined;
+      }
+    }
+
+    if (importStrategy === "useBundled") {
+      const bundledEntry = path.join(this.context.extensionPath, "bundled", "run_server.py");
+      if (!(await this.fileExists(bundledEntry))) {
+        this.setServerState("missing");
+        this.log(
+          `Bundled server not found at ${bundledEntry}. ` +
+            `Run "npm run bundle-server" or set docassemble-lsp.importStrategy to "fromEnvironment".`,
+        );
+        return undefined;
+      }
+      return {
+        command: interpreter,
+        args: [bundledEntry],
+        env: resolvedEnv,
+        display: `${interpreter} ${bundledEntry}`,
+      };
     }
 
     return {
-      command: configuredCommand,
+      command: interpreter,
+      args: ["-m", "docassemble_lsp", "lsp"],
       env: resolvedEnv,
+      display: `${interpreter} -m docassemble_lsp lsp`,
     };
+  }
+
+  private async fileExists(filePath: string): Promise<boolean> {
+    try {
+      await vscode.workspace.fs.stat(vscode.Uri.file(filePath));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private commandExists(command: string): boolean {
+    const checkCommand = process.platform === "win32" ? "where" : "which";
+    try {
+      execSync(`${checkCommand} "${command}"`, { stdio: "ignore" });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private readBundledLspVersion(): string | undefined {
+    const versionPath = path.join(this.context.extensionPath, "bundled", "bundled-lsp-version.txt");
+    try {
+      return readFileSync(versionPath, "utf-8").trim();
+    } catch {
+      return undefined;
+    }
   }
 
   private toTrace(value: string): Trace {
@@ -519,7 +662,7 @@ class DocassembleLspController {
       case "running":
         this.statusBar.text = "$(check) Docassemble LSP";
         this.statusBar.tooltip = this.lastResolvedCommand
-          ? `${this.lastResolvedCommand} — click to restart`
+          ? `${this.lastResolvedCommand}${this.bundledLspVersion ? ` (LSP v${this.bundledLspVersion})` : ""} — click to restart`
           : "Docassemble LSP: click to restart";
         this.statusBar.command = "docassemble-lsp.restart";
         break;
@@ -558,27 +701,42 @@ class DocassembleLspController {
 
 let activeController: DocassembleLspController | undefined;
 
+function isKnownClientError(reason: unknown): boolean {
+  const message = reason instanceof Error ? reason.message : String(reason);
+  return message.includes("Client is not running") || message.includes("Pending response rejected");
+}
+
 export async function activate(context: vscode.ExtensionContext): Promise<DocassembleExtensionApi> {
   const output = vscode.window.createOutputChannel("Docassemble Language Server");
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
   statusBar.name = "Docassemble Language Server";
-  const controller = new DocassembleLspController(output, statusBar);
+
+  const unhandledHandler = (reason: unknown): void => {
+    if (!isKnownClientError(reason)) {
+      console.error("[docassemble-lsp] Unhandled rejection:", reason);
+    }
+  };
+  process.on("unhandledRejection", unhandledHandler);
+  context.subscriptions.push({
+    dispose: () => process.off("unhandledRejection", unhandledHandler),
+  });
+  const controller = new DocassembleLspController(context, output, statusBar);
   activeController = controller;
 
   context.subscriptions.push(
     output,
     statusBar,
-    vscode.commands.registerCommand("docassemble-lsp.restart", async () => {
-      await controller.restart();
+    vscode.commands.registerCommand("docassemble-lsp.restart", () => {
+      controller.restart();
     }),
     vscode.commands.registerCommand("docassemble-lsp.showOutput", () => {
       controller.showOutput();
     }),
-    vscode.commands.registerCommand("docassemble-lsp.showSetupHelp", async () => {
-      await controller.showSetupHelp();
+    vscode.commands.registerCommand("docassemble-lsp.showSetupHelp", () => {
+      controller.showSetupHelp();
     }),
-    vscode.workspace.onDidChangeConfiguration(async (event) => {
-      await controller.handleConfigurationChange(event);
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      controller.handleConfigurationChange(event);
     }),
     vscode.window.onDidChangeActiveTextEditor((editor) => {
       controller.handleActiveEditorChange(editor);
@@ -596,19 +754,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<Docass
     },
   );
 
-  await controller.start();
+  try {
+    await controller.start();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    output.appendLine(`[docassemble-lsp] Initial start failed: ${message}`);
+  }
+
   controller.handleActiveEditorChange(vscode.window.activeTextEditor);
 
   return {
-    restart: async () => {
-      await controller.restart();
-    },
-    showOutput: () => {
-      controller.showOutput();
-    },
-    showSetupHelp: async () => {
-      await controller.showSetupHelp();
-    },
+    restart: () => controller.restart(),
+    showOutput: () => controller.showOutput(),
+    showSetupHelp: () => controller.showSetupHelp(),
     getServerState: () => controller.getServerState(),
   };
 }

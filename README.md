@@ -2,58 +2,59 @@
 
 Provides syntax highlighting for [Docassemble](https://docassemble.org/) YAML files that incorporate Python, Mako, and Jinja.
 
-The extension now also supports the external `docassemble-lsp` language server for diagnostics, completion, hover, definitions, references, rename, symbols, formatting, and code actions.
+The extension ships with the `docassemble-lsp` language server bundled inside the VSIX. It runs automatically when you open a Docassemble file — no separate install needed.
 
-The language server is optional.
+The language server provides diagnostics, completion, hover, definitions, references, rename, symbols, formatting, and code actions. It is optional — without it the extension still provides full syntax highlighting.
 
-- If `docassemble-lsp` is available on your system `PATH`, the extension will try to start it automatically for Docassemble files.
-- If it is not installed, the extension still works as a grammar-only syntax-highlighting extension.
-- The extension does not bundle Python or `docassemble-lsp`.
+## Language Server
 
-## Install The Optional Language Server
+Three ways to run the server, controlled by `docassemble-lsp.importStrategy`:
 
-Install `docassemble-lsp` in a Python environment that is available to VS Code.
-
-The default startup command is:
-
-```text
-docassemble-lsp lsp
-```
-
-If you prefer to use a specific Python interpreter or virtual environment, point the extension at that command instead.
+| Strategy | What it does |
+|---|---|
+| `"useBundled"` (default) | Runs the server shipped in the extension. Dependencies are pure Python (no compiled extensions). |
+| `"fromEnvironment"` | Runs `python -m docassemble_lsp lsp` from the active Python environment, or the `docassemble-lsp.command` string if set. |
 
 ## Settings
 
-The extension contributes these settings:
+| Setting | Description |
+|---|---|
+| `docassemble-lsp.enabled` | Enable or disable the language server. |
+| `docassemble-lsp.importStrategy` | `"useBundled"` (default) or `"fromEnvironment"`. |
+| `docassemble-lsp.command` | Shell command used when `importStrategy` is `"fromEnvironment"`. Examples: |
+| | `docassemble-lsp lsp` |
+| | `/path/to/venv/bin/python -m docassemble_lsp lsp` |
+| | `uv run --project ~/Projects/docassemble-lsp docassemble-lsp lsp` |
+| `docassemble-lsp.interpreter` | Python interpreter override for `"useBundled"` or `"fromEnvironment"` (when no `command` is set). Defaults to the Python extension's active environment. |
+| `docassemble-lsp.env` | Extra environment variables merged into the server process. |
+| `docassemble-lsp.trace.server` | Protocol trace level for debugging. |
+| `docassemble-lsp.showNotifications` | When to show server notifications. |
 
-- `docassemble-lsp.enabled`: enable or disable the optional language server.
-- `docassemble-lsp.command`: full command line to launch. Defaults to `docassemble-lsp lsp`.
-- `docassemble-lsp.env`: extra environment variables for the server process.
-- `docassemble-lsp.trace.server`: protocol trace level for debugging. When set to `messages` or `verbose`, the extension also logs client-side selector, Enter/newline, and on-type formatting diagnostics to the Docassemble Language Server output channel.
+## Log Level
 
-Example using the standard installed command:
-
-```json
-{
-	"docassemble-lsp.command": "docassemble-lsp lsp"
-}
-```
-
-Example using a specific Python interpreter:
-
-```json
-{
-	"docassemble-lsp.command": "/path/to/venv/bin/python -m docassemble_lsp lsp"
-}
-```
-
-Example using a local checkout through `uv run`:
+Set the server's log level via the `env` setting:
 
 ```json
 {
-	"docassemble-lsp.command": "uv run --project ~/Projects/docassemble-lsp docassemble-lsp lsp"
+  "docassemble-lsp.env": {
+    "DOCASSEMBLE_LSP_LOG_LEVEL": "DEBUG"
+  }
 }
 ```
+
+Levels: `DEBUG`, `INFO`, `WARNING` (default), `ERROR`, `CRITICAL`.
+
+## Development
+
+**Build dependencies:** `uv` or `python3` + `pip` must be on `PATH` to build. The bundle script copies the Python server from `lsp/src/` and installs its dependencies into `bundled/libs/` using `uv pip install` (falling back to `pip`).
+
+```sh
+npm run build          # bundles server, installs deps, compiles TypeScript
+npm run bundle-server  # bundle step only
+vsce package           # packages the VSIX
+```
+
+The `bundled/` directory is git-ignored and regenerated on every build.
 
 ## Commands
 

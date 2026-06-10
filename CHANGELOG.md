@@ -4,26 +4,21 @@
 
 ### Added
 
-- Optional `docassemble-lsp` integration over stdio.
+- Bundled `docassemble-lsp` server ships inside the VSIX — no separate install needed. Dependencies are installed at build time (pure Python only, no compiled extensions).
+- Python extension integration: server uses the Python extension's active environment for interpreter resolution when running the bundled server or `fromEnvironment` mode.
+- `docassemble-lsp.importStrategy` setting: `"useBundled"` (default) runs the shipped server via the Python interpreter; `"fromEnvironment"` runs `python -m docassemble_lsp lsp` or a custom command string.
+- `docassemble-lsp.interpreter` setting: override the Python interpreter for bundled or fromEnvironment modes.
+- `docassemble-lsp.command` setting: full shell command for `fromEnvironment` mode (supports `uv run`, direct paths, etc.).
+- `docassemble-lsp.showNotifications` setting: control when server notifications are shown.
+- `DOCASSEMBLE_LSP_LOG_LEVEL` environment variable: set the server's log level via `docassemble-lsp.env` (levels: DEBUG, INFO, WARNING, ERROR, CRITICAL).
 - Commands to restart the language server and show the language server output.
 - A status bar indicator and setup-help command for optional language server discovery, troubleshooting, and restarting.
-- Settings for a custom full language-server command, environment variables, and protocol tracing.
-- Extension-host smoke tests covering disabled, missing-command, and configured-command startup paths.
-- Extension-host coverage for Enter-triggered LSP on-type formatting.
-- A direct `docassemble-lsp` smoke test script and `prek` local hook for system-level validation.
+- Python syntax highlighting for `show if` values in both block-scalar (`show if: |`) and inline (`show if: <expr>`) forms.
 
 ### Changed
 
 - Raised the minimum supported VS Code version for the new extension runtime.
 - Docassemble documents now default to this extension as their formatter and enable `editor.formatOnType` unless the user overrides those settings.
-
-### Added
-
-- Python syntax highlighting for `show if` values in both block-scalar (`show if: |`) and inline (`show if: <expr>`) forms.
-
-### Fixed
-
-- Added client-side debug logging for document selector matches, Enter/newline handling, and `textDocument/onTypeFormatting` request/response flow.
 
 ## [0.3.11] - 2026-03-24
 

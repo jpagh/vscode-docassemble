@@ -1,15 +1,23 @@
 [[repos]]
-  hooks = [{ id = "oxfmt" }]
-  repo = "https://github.com/oxc-project/mirrors-oxfmt"
-  rev = "v0.53.0"
+    hooks = [
+        { entry = "taplo format", id = "taplo-format", language = "system", name = "taplo-format", types_or = [
+            "toml",
+        ] },
+    ]
+    repo = "local"
 
 [[repos]]
-  hooks = [{ id = "oxlint" }]
-  repo = "https://github.com/oxc-project/mirrors-oxlint"
-  rev = "v1.68.0"
+    hooks = [{ id = "oxfmt" }]
+    repo  = "https://github.com/oxc-project/mirrors-oxfmt"
+    rev   = "v0.53.0"
 
-# [[repos]]
-#   repo = "local"
-#   hooks = [
-#     { id = "real-docassemble-lsp-smoke", name = "real docassemble-lsp smoke", entry = "npm run test:real-lsp", language = "system", pass_filenames = false, always_run = true }
-#   ]
+[[repos]]
+    hooks = [{ id = "oxlint" }]
+    repo  = "https://github.com/oxc-project/mirrors-oxlint"
+    rev   = "v1.68.0"
+
+    # [[repos]]
+    #   repo = "local"
+    #   hooks = [
+    #     { id = "real-docassemble-lsp-smoke", name = "real docassemble-lsp smoke", entry = "npm run test:real-lsp", language = "system", pass_filenames = false, always_run = true }
+    #   ]

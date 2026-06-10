@@ -5,3 +5,4 @@ vsc-extension-quickstart.md
 src/**
 dist/test/**
 tsconfig.json
+scripts/**

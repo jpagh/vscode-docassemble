@@ -56,22 +56,29 @@ export async function runTests(): Promise<void> {
       },
     },
     {
-      name: "reports an empty server command without failing activation",
+      name: "handles empty fromEnvironment command gracefully",
       run: async () => {
         await updateConfiguration("docassemble-lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.importStrategy", "fromEnvironment");
         await updateConfiguration("docassemble-lsp.command", "");
 
         const api = await getApi();
         await api.restart();
 
-        const state = await waitForState(api, "missing");
-        assert.equal(state.resolvedCommand, undefined);
+        // The server may land in "running" (if docassemble-lsp is installed),
+        // "missing" (if no python3), or "error" (if process failed).
+        // The important thing is activation doesn't crash.
+        await waitFor(() => {
+          const s = api.getServerState();
+          return s.state === "running" || s.state === "missing" || s.state === "error";
+        });
       },
     },
     {
       name: "starts with a configured command",
       run: async () => {
         await updateConfiguration("docassemble-lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.importStrategy", "fromEnvironment");
         await updateConfiguration(
           "docassemble-lsp.command",
           `${quoteForShell(process.execPath)} ${quoteForShell(mockServerPath())}`,
@@ -90,6 +97,7 @@ export async function runTests(): Promise<void> {
         const logPath = path.join(os.tmpdir(), `docassemble-mock-lsp-${Date.now()}.log`);
 
         await updateConfiguration("docassemble-lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.importStrategy", "fromEnvironment");
         await updateConfiguration(
           "docassemble-lsp.command",
           `${quoteForShell(process.execPath)} ${quoteForShell(mockServerPath())}`,
@@ -123,6 +131,7 @@ export async function runTests(): Promise<void> {
       name: "clears docassemble diagnostics after switching language mode to yaml",
       run: async () => {
         await updateConfiguration("docassemble-lsp.enabled", true);
+        await updateConfiguration("docassemble-lsp.importStrategy", "fromEnvironment");
         await updateConfiguration(
           "docassemble-lsp.command",
           `${quoteForShell(process.execPath)} ${quoteForShell(mockServerPath())}`,
@@ -157,13 +166,208 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "fromEnvironment");
+        await updateConfiguration("docassemble-lsp.command", "docassemble-lsp lsp");
 
         const api = await getApi();
-        await updateConfiguration("docassemble-lsp.command", "docassemble-lsp lsp");
         await api.restart();
 
         const state = await waitForState(api, "running");
         assert.match(state.resolvedCommand ?? "", /docassemble-lsp lsp$/);
+      },
+    },
+    {
+      name: "starts bundled server via interpreter",
+      run: async () => {
+        if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" || !python3Available()) {
+          throw new SkipTest();
+        }
+
+        await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
+        await updateConfiguration("docassemble-lsp.interpreter", []);
+
+        const api = await getApi();
+        await api.restart();
+
+        const state = await waitForState(api, "running");
+        assert.match(state.resolvedCommand ?? "", /python.*run_server\.py$/);
+      },
+    },
+    {
+      name: "publishes diagnostics for invalid YAML key via bundled server",
+      run: async () => {
+        if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" || !python3Available()) {
+          throw new SkipTest();
+        }
+
+        await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
+        await updateConfiguration("docassemble-lsp.interpreter", []);
+
+        const api = await getApi();
+        await api.restart();
+        await waitForState(api, "running");
+
+        const document = await vscode.workspace.openTextDocument({
+          language: "docassemble",
+          content: "question: |\n  test\nfoobar: bad\n",
+        });
+        await vscode.window.showTextDocument(document);
+
+        await waitFor(() => {
+          const diags = vscode.languages.getDiagnostics(document.uri);
+          return diags.some((d) => String(d.code) === "E301");
+        });
+      },
+    },
+    {
+      name: "provides completions via bundled server",
+      run: async () => {
+        if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" || !python3Available()) {
+          throw new SkipTest();
+        }
+
+        await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
+        await updateConfiguration("docassemble-lsp.interpreter", []);
+
+        const api = await getApi();
+        await api.restart();
+        await waitForState(api, "running");
+
+        const document = await vscode.workspace.openTextDocument({
+          language: "docassemble",
+          content: "question:\n  ",
+        });
+        const editor = await vscode.window.showTextDocument(document);
+        const pos = new vscode.Position(1, 2);
+
+        const items = await vscode.commands.executeCommand<vscode.CompletionList>(
+          "vscode.executeCompletionItemProvider",
+          document.uri,
+          pos,
+        );
+
+        assert.ok(items, "Expected a completion list");
+        assert.ok(items.items.length > 0, "Expected at least one completion item");
+      },
+    },
+    {
+      name: "provides hover info via bundled server",
+      run: async () => {
+        if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" || !python3Available()) {
+          throw new SkipTest();
+        }
+
+        await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
+        await updateConfiguration("docassemble-lsp.interpreter", []);
+
+        const api = await getApi();
+        await api.restart();
+        await waitForState(api, "running");
+
+        const document = await vscode.workspace.openTextDocument({
+          language: "docassemble",
+          content: "question: |\n  test\n",
+        });
+        await vscode.window.showTextDocument(document);
+
+        const hovers = await vscode.commands.executeCommand<vscode.Hover[]>(
+          "vscode.executeHoverProvider",
+          document.uri,
+          new vscode.Position(0, 1),
+        );
+
+        assert.ok(hovers && hovers.length > 0, "Expected at least one hover result");
+        assert.ok(hovers[0].contents.length > 0, "Expected hover content");
+      },
+    },
+    {
+      name: "provides document symbols via bundled server",
+      run: async () => {
+        if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" || !python3Available()) {
+          throw new SkipTest();
+        }
+
+        await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
+        await updateConfiguration("docassemble-lsp.interpreter", []);
+
+        const api = await getApi();
+        await api.restart();
+        await waitForState(api, "running");
+
+        const document = await vscode.workspace.openTextDocument({
+          language: "docassemble",
+          content: "question: |\n  test\ncode: |\n  x = 1\n",
+        });
+        await vscode.window.showTextDocument(document);
+
+        const symbols = await vscode.commands.executeCommand<vscode.DocumentSymbol[]>(
+          "vscode.executeDocumentSymbolProvider",
+          document.uri,
+        );
+
+        assert.ok(symbols && symbols.length > 0, "Expected document symbols");
+      },
+    },
+    {
+      name: "provides code actions for invalid key via bundled server",
+      run: async () => {
+        if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" || !python3Available()) {
+          throw new SkipTest();
+        }
+
+        await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
+        await updateConfiguration("docassemble-lsp.interpreter", []);
+
+        const api = await getApi();
+        await api.restart();
+        await waitForState(api, "running");
+
+        const document = await vscode.workspace.openTextDocument({
+          language: "docassemble",
+          content: "question: |\n  test\nfoobar: bad\n",
+        });
+        await vscode.window.showTextDocument(document);
+
+        await waitFor(() =>
+          vscode.languages.getDiagnostics(document.uri).some((d) => String(d.code) === "E301"),
+        );
+
+        const codeActions = await vscode.commands.executeCommand<vscode.CodeAction[]>(
+          "vscode.executeCodeActionProvider",
+          document.uri,
+          new vscode.Range(0, 0, 2, 0),
+        );
+
+        assert.ok(codeActions && codeActions.length > 0, "Expected code actions for diagnostic");
+      },
+    },
+    {
+      name: "starts with Python extension integration",
+      run: async () => {
+        if (!pythonExtensionAvailable()) {
+          throw new SkipTest();
+        }
+
+        await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
+        await updateConfiguration("docassemble-lsp.interpreter", []);
+
+        const api = await getApi();
+        await api.restart();
+
+        const state = await waitForState(api, "running");
+        assert.ok(state.resolvedCommand, "Expected a resolved interpreter command");
+        assert.doesNotMatch(
+          state.resolvedCommand ?? "",
+          /python3$/,
+          "Expected Python extension to resolve a real interpreter, not fallback",
+        );
       },
     },
   ];
@@ -213,7 +417,9 @@ class SkipTest extends Error {}
 async function getApi(): Promise<DocassembleExtensionApi> {
   const extension = vscode.extensions.getExtension<DocassembleExtensionApi>(EXTENSION_ID);
   assert.ok(extension, `Expected extension ${EXTENSION_ID} to be available.`);
-  return extension.isActive ? extension.exports : extension.activate();
+  const api = await extension.activate();
+  assert.ok(api, `${EXTENSION_ID}.activate() returned undefined`);
+  return api;
 }
 
 async function updateConfiguration<T>(section: string, value: T): Promise<void> {
@@ -224,9 +430,12 @@ async function updateConfiguration<T>(section: string, value: T): Promise<void> 
 
 async function resetConfiguration(): Promise<void> {
   await updateConfiguration("docassemble-lsp.enabled", undefined);
+  await updateConfiguration("docassemble-lsp.importStrategy", undefined);
   await updateConfiguration("docassemble-lsp.command", undefined);
+  await updateConfiguration("docassemble-lsp.interpreter", undefined);
   await updateConfiguration("docassemble-lsp.env", undefined);
   await updateConfiguration("docassemble-lsp.trace.server", undefined);
+  await updateConfiguration("docassemble-lsp.showNotifications", undefined);
   await updateConfiguration("editor.formatOnType", undefined);
   await updateConfiguration("editor.insertSpaces", undefined);
   await updateConfiguration("editor.tabSize", undefined);
@@ -237,6 +446,23 @@ function mockServerPath(): string {
   const extension = vscode.extensions.getExtension(EXTENSION_ID);
   assert.ok(extension, `Expected extension ${EXTENSION_ID} to be available.`);
   return path.join(extension.extensionPath, "dist", "test", "fixtures", "mock-lsp-server.js");
+}
+
+function bundledServerPath(): string {
+  const extension = vscode.extensions.getExtension(EXTENSION_ID);
+  assert.ok(extension, `Expected extension ${EXTENSION_ID} to be available.`);
+  return path.join(extension.extensionPath, "bundled", "run_server.py");
+}
+
+function python3Available(): boolean {
+  return commandExists("python3");
+}
+
+function pythonExtensionAvailable(): boolean {
+  return (
+    process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST === "1" &&
+    !!vscode.extensions.getExtension("ms-python.python")
+  );
 }
 
 function commandExists(command: string): boolean {
