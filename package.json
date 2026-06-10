@@ -7,7 +7,6 @@
 	"categories": [
 		"Programming Languages"
 	],
-
 	"keywords": [
 		"docassemble",
 		"yaml"
@@ -21,11 +20,12 @@
 	"publisher": "jackadamson",
 	"scripts": {
 		"bundle-server": "node scripts/bundle-server.mjs",
-		"build": "npm run bundle-server && tsc -p ./",
+		"compile": "tsc -p ./",
+		"build": "npm run bundle-server && tsc -p ./ && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=node18 --format=cjs --sourcemap=external --minify",
 		"watch": "tsc -w -p ./",
-		"test": "npm run build && node ./dist/test/runTest.js",
+		"test": "npm run bundle-server && npm run compile && node ./dist/test/runTest.js",
 		"test:real-lsp": "node ./scripts/real-lsp-smoke.mjs",
-		"test:real-lsp-extension": "npm run build && DOCASSEMBLE_LSP_ENABLE_REAL_TEST=1 node ./dist/test/runTest.js"
+		"test:real-lsp-extension": "npm run bundle-server && npm run compile && DOCASSEMBLE_LSP_ENABLE_REAL_TEST=1 node ./dist/test/runTest.js"
 	},
 	"contributes": {
 		"commands": [
@@ -193,6 +193,7 @@
 		"@types/node": "^22.15.30",
 		"@types/vscode": "^1.93.0",
 		"@vscode/test-electron": "^2.3.10",
+		"esbuild": "^0.28.0",
 		"typescript": "^5.8.3"
 	},
 	"__metadata": {
