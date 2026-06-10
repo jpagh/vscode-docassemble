@@ -4,7 +4,7 @@ Provides syntax highlighting for [Docassemble](https://docassemble.org/) YAML fi
 
 The extension ships with the `docassemble-lsp` language server bundled inside the VSIX. It runs automatically when you open a Docassemble file — no separate install needed.
 
-The language server provides diagnostics, completion, hover, definitions, references, rename, symbols, formatting, and code actions. It is optional — without it the extension still provides full syntax highlighting.
+The language server provides diagnostics, completion, hover, definitions, references, symbols, formatting, and code actions. It is optional — without it the extension still provides full syntax highlighting.
 
 ## Language Server
 

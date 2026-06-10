@@ -429,7 +429,20 @@ async function updateConfiguration<T>(section: string, value: T): Promise<void> 
 }
 
 async function resetConfiguration(): Promise<void> {
-  await updateConfiguration("docassemble-lsp.enabled", undefined);
+  // Disable the server first so it stops cleanly, preventing noisy
+  // unhandled-rejection warnings from the language-client when pending
+  // responses are dropped during a config-triggered restart.
+  await updateConfiguration("docassemble-lsp.enabled", false);
+  try {
+    const api = vscode.extensions.getExtension<DocassembleExtensionApi>(EXTENSION_ID)?.exports;
+    if (api) {
+      await waitForState(api, "disabled");
+    }
+  } catch {
+    // If the extension API is unavailable, fall back to a timed wait
+    await sleep(500);
+  }
+  // Clear remaining settings while the server is disabled, then re-enable
   await updateConfiguration("docassemble-lsp.importStrategy", undefined);
   await updateConfiguration("docassemble-lsp.command", undefined);
   await updateConfiguration("docassemble-lsp.interpreter", undefined);
@@ -440,6 +453,11 @@ async function resetConfiguration(): Promise<void> {
   await updateConfiguration("editor.insertSpaces", undefined);
   await updateConfiguration("editor.tabSize", undefined);
   await updateLanguageConfiguration("docassemble", undefined);
+  await updateConfiguration("docassemble-lsp.enabled", undefined);
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function mockServerPath(): string {

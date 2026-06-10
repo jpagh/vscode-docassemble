@@ -272,6 +272,21 @@ class DocassembleLspController {
     const client = this.client;
     this.client = undefined;
 
+    // Avoid calling stop() on a client that never fully started — the
+    // underlying connection may already be closed, and any pending init
+    // promises will produce unhandled rejections when disposed.
+    const state = client.state;
+    if (state === ClientState.Starting) {
+      try {
+        client.dispose();
+      } catch {
+        // dispose may throw if the client is already in a terminal state
+      }
+      this.setServerState("stopped");
+      this.log("Language server stopped.");
+      return;
+    }
+
     try {
       await client.stop(2000);
     } catch (error) {

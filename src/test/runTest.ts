@@ -15,9 +15,16 @@ async function main(): Promise<void> {
   const sandboxExtensionsDir = path.join(cacheDir, "extensions");
 
   const vscodeExecutablePath = await downloadAndUnzipVSCode({ cachePath: cacheDir });
+  const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
+
+  // Add the local LSP venv to PATH so extension tests can find docassemble-lsp
+  const lspVenvBin = path.resolve(__dirname, "../../../lsp/.venv/bin");
+  const testEnv: Record<string, string> =
+    process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST === "1"
+      ? { PATH: `${lspVenvBin}:${process.env.PATH ?? ""}` }
+      : {};
 
   if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST === "1") {
-    const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
     const hasPythonExt =
       existsSync(sandboxExtensionsDir) &&
       readdirSync(sandboxExtensionsDir).some((entry) => entry.startsWith("ms-python.python"));
@@ -48,11 +55,26 @@ async function main(): Promise<void> {
     }
   }
 
-  await runTests({
-    extensionDevelopmentPath,
-    extensionTestsPath,
-    vscodeExecutablePath,
-  });
+  // ELECTRON_RUN_AS_NODE forces the Electron binary into Node.js mode, which
+  // rejects unknown flags like --no-sandbox and --extensionTestsPath. Wrap
+  // the binary to unset it and ensure VS Code / Electron app mode.
+  const isMacArm = process.platform === "darwin" && process.arch === "arm64";
+  if (isMacArm && process.env.ELECTRON_RUN_AS_NODE) {
+    const wrapper = path.resolve(__dirname, "../../scripts/vscode-test-wrapper.sh");
+    await runTests({
+      extensionDevelopmentPath,
+      extensionTestsPath,
+      vscodeExecutablePath: wrapper,
+      extensionTestsEnv: { ...testEnv, VSCODE_ELECTRON_BIN: vscodeExecutablePath },
+    });
+  } else {
+    await runTests({
+      extensionDevelopmentPath,
+      extensionTestsPath,
+      vscodeExecutablePath,
+      extensionTestsEnv: testEnv,
+    });
+  }
 }
 
 void main();
