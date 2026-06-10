@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-06-10
+
 ### Added
 
 - Bundled `docassemble-lsp` server ships inside the VSIX — no separate install needed. Dependencies are installed at build time (pure Python only, no compiled extensions).

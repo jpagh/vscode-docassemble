@@ -1,7 +1,7 @@
 {
 	"name": "vscode-docassemble",
 	"displayName": "Docassemble YAML",
-	"version": "0.3.11",
+	"version": "1.0.0",
 	"description": "Syntax highlighting for Docassemble YAML with optional docassemble-lsp integration.",
 	"main": "./dist/extension.js",
 	"categories": [
