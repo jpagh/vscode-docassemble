@@ -13,6 +13,8 @@ definitions, references, symbols, formatting, and code actions. It is
 optional — without it the extension still provides full syntax
 highlighting.
 
+![yaml](https://raw.githubusercontent.com/jpagh/vscode-docassemble/main/demo.png)
+
 ## Language Server
 
 Three ways to run the server, controlled by
@@ -103,5 +105,3 @@ build.
 - The extension-host suite includes an Enter/on-type regression test
   that verifies the client sends `textDocument/onTypeFormatting` and
   applies the returned edit.
-
-![yaml](https://raw.githubusercontent.com/jpagh/vscode-docassemble/main/demo.png)
