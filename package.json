@@ -1,211 +1,211 @@
 {
-	"name": "vscode-docassemble",
-	"displayName": "Docassemble YAML",
-	"version": "1.0.0",
-	"description": "Syntax highlighting for Docassemble YAML with optional docassemble-lsp integration.",
-	"main": "./dist/extension.js",
-	"categories": [
-		"Programming Languages"
-	],
-	"keywords": [
-		"docassemble",
-		"yaml"
-	],
-	"license": "Apache-2.0",
-	"author": "Jack Adamson",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/jpagh/vscode-docassemble"
-	},
-	"publisher": "jackadamson",
-	"scripts": {
-		"bundle-server": "node scripts/bundle-server.mjs",
-		"compile": "tsc -p ./",
-		"build": "npm run bundle-server && tsc -p ./ && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=node18 --format=cjs --sourcemap=external --minify",
-		"watch": "tsc -w -p ./",
-		"test": "npm run bundle-server && npm run compile && node ./dist/test/runTest.js",
-		"test:real-lsp": "node ./scripts/real-lsp-smoke.mjs",
-		"test:real-lsp-extension": "npm run bundle-server && npm run compile && DOCASSEMBLE_LSP_ENABLE_REAL_TEST=1 node ./dist/test/runTest.js"
-	},
-	"contributes": {
-		"commands": [
-			{
-				"command": "docassemble-lsp.restart",
-				"title": "Docassemble: Restart Language Server"
-			},
-			{
-				"command": "docassemble-lsp.showOutput",
-				"title": "Docassemble: Show Language Server Output"
-			},
-			{
-				"command": "docassemble-lsp.showSetupHelp",
-				"title": "Docassemble: Show Language Server Setup Help"
-			}
-		],
-		"configuration": {
-			"title": "Docassemble",
-			"properties": {
-				"docassemble-lsp.enabled": {
-					"type": "boolean",
-					"default": true,
-					"description": "Start the optional docassemble-lsp language server when a Docassemble document opens and a server command can be resolved."
-				},
-				"docassemble-lsp.importStrategy": {
-					"type": "string",
-					"default": "useBundled",
-					"enum": [
-						"useBundled",
-						"fromEnvironment"
-					],
-					"markdownDescription": "How to resolve the docassemble-lsp server.\n- `useBundled` — run the server shipped in the extension via the Python interpreter.\n- `fromEnvironment` — run the server from the Python environment. If `docassemble-lsp.command` is set, runs it as a shell command; otherwise runs `python -m docassemble_lsp lsp`."
-				},
-				"docassemble-lsp.command": {
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Shell command for running the server when `importStrategy` is `fromEnvironment`. Examples:\n- `docassemble-lsp lsp`\n- `/path/to/venv/bin/python -m docassemble_lsp lsp`\n- `uv run --project /path docassemble-lsp lsp`\n\nLeave empty for default behaviour (`python -m docassemble_lsp lsp`)."
-				},
-				"docassemble-lsp.interpreter": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					},
-					"default": [],
-					"markdownDescription": "Python interpreter to use for running the server. If empty, uses the Python extension's active environment. Example: `[\"/path/to/python3\"]`."
-				},
-				"docassemble-lsp.showNotifications": {
-					"type": "string",
-					"default": "off",
-					"enum": [
-						"off",
-						"onError",
-						"onWarning",
-						"always"
-					],
-					"markdownDescription": "Controls when notifications are shown for server errors and warnings."
-				},
-				"docassemble-lsp.trace.server": {
-					"type": "string",
-					"default": "off",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"markdownDescription": "Trace level for the language client/server protocol log."
-				},
-				"docassemble-lsp.env": {
-					"type": "object",
-					"default": {},
-					"additionalProperties": {
-						"type": "string"
-					},
-					"description": "Extra environment variables merged into the server process environment."
-				}
-			}
-		},
-		"configurationDefaults": {
-			"[docassemble]": {
-				"editor.defaultFormatter": "jackadamson.vscode-docassemble",
-				"editor.formatOnType": true,
-				"editor.insertSpaces": true,
-				"editor.tabSize": 2
-			}
-		},
-		"languages": [
-			{
-				"id": "docassemble",
-				"aliases": [
-					"Docassemble YAML",
-					"docassemble-yaml"
-				],
-				"extensions": [
-					".yml"
-				],
-				"configuration": "./language-configuration/language-configuration-yaml.json"
-			},
-			{
-				"id": "mako",
-				"aliases": [
-					"Mako",
-					"mako"
-				],
-				"extensions": [],
-				"configuration": "./language-configuration/language-configuration-mako.json"
-			},
-			{
-				"id": "jinja",
-				"aliases": [
-					"Jinja",
-					"jinja"
-				],
-				"extensions": [],
-				"configuration": "./language-configuration/language-configuration-jinja.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "docassemble",
-				"scopeName": "source.docassemble.yaml",
-				"path": "./syntaxes/yaml.tmLanguage.json"
-			},
-			{
-				"language": "jinja",
-				"scopeName": "source.jinja",
-				"path": "./syntaxes/jinja.tmLanguage.json"
-			},
-			{
-				"language": "mako",
-				"scopeName": "source.mako",
-				"path": "./syntaxes/mako.tmLanguage.json"
-			},
-			{
-				"injectTo": [
-					"source.docassemble.yaml"
-				],
-				"scopeName": "python.injection",
-				"path": "./syntaxes/python-injection.json"
-			},
-			{
-				"injectTo": [
-					"source.docassemble.yaml"
-				],
-				"scopeName": "mako.injection",
-				"path": "./syntaxes/mako-injection.json"
-			},
-			{
-				"injectTo": [
-					"source.docassemble.yaml"
-				],
-				"scopeName": "jinja.injection",
-				"path": "./syntaxes/jinja-injection.json"
-			}
-		]
-	},
-	"icon": "icon.png",
-	"engines": {
-		"vscode": "^1.93.0"
-	},
-	"dependencies": {
-		"@vscode/python-extension": "^1.0.5",
-		"vscode-languageclient": "^9.0.1"
-	},
-	"devDependencies": {
-		"@types/node": "^22.15.30",
-		"@types/vscode": "^1.93.0",
-		"@vscode/test-electron": "^3.0.0",
-		"esbuild": "^0.28.0",
-		"typescript": "^5.8.3"
-	},
-	"__metadata": {
-		"id": "517a3d61-d626-45e9-a011-03be13277f9a",
-		"publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
-		"publisherDisplayName": "Jack Adamson",
-		"targetPlatform": "undefined",
-		"updated": false,
-		"isPreReleaseVersion": false,
-		"hasPreReleaseVersion": false,
-		"installedTimestamp": 1707172694885,
-		"pinned": false,
-		"size": 2511695411
-	}
+    "name": "vscode-docassemble",
+    "displayName": "Docassemble YAML",
+    "version": "1.0.0",
+    "description": "Syntax highlighting for Docassemble YAML with optional docassemble-lsp integration.",
+    "main": "./dist/extension.js",
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "docassemble",
+        "yaml"
+    ],
+    "license": "Apache-2.0",
+    "author": "Jack Adamson",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jpagh/vscode-docassemble"
+    },
+    "publisher": "jackadamson",
+    "scripts": {
+        "bundle-server": "node scripts/bundle-server.mjs",
+        "compile": "tsc -p ./",
+        "build": "npm run bundle-server && tsc -p ./ && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=node18 --format=cjs --sourcemap=external --minify",
+        "watch": "tsc -w -p ./",
+        "test": "npm run bundle-server && npm run compile && node ./dist/test/runTest.js",
+        "test:real-lsp": "node ./scripts/real-lsp-smoke.mjs",
+        "test:real-lsp-extension": "npm run bundle-server && npm run compile && DOCASSEMBLE_LSP_ENABLE_REAL_TEST=1 node ./dist/test/runTest.js"
+    },
+    "contributes": {
+        "commands": [
+            {
+                "command": "docassemble-lsp.restart",
+                "title": "Docassemble: Restart Language Server"
+            },
+            {
+                "command": "docassemble-lsp.showOutput",
+                "title": "Docassemble: Show Language Server Output"
+            },
+            {
+                "command": "docassemble-lsp.showSetupHelp",
+                "title": "Docassemble: Show Language Server Setup Help"
+            }
+        ],
+        "configuration": {
+            "title": "Docassemble",
+            "properties": {
+                "docassemble-lsp.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Start the optional docassemble-lsp language server when a Docassemble document opens and a server command can be resolved."
+                },
+                "docassemble-lsp.importStrategy": {
+                    "type": "string",
+                    "default": "useBundled",
+                    "enum": [
+                        "useBundled",
+                        "fromEnvironment"
+                    ],
+                    "markdownDescription": "How to resolve the docassemble-lsp server.\n- `useBundled` — run the server shipped in the extension via the Python interpreter.\n- `fromEnvironment` — run the server from the Python environment. If `docassemble-lsp.command` is set, runs it as a shell command; otherwise runs `python -m docassemble_lsp lsp`."
+                },
+                "docassemble-lsp.command": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "Shell command for running the server when `importStrategy` is `fromEnvironment`. Examples:\n- `docassemble-lsp lsp`\n- `/path/to/venv/bin/python -m docassemble_lsp lsp`\n- `uv run --project /path docassemble-lsp lsp`\n\nLeave empty for default behaviour (`python -m docassemble_lsp lsp`)."
+                },
+                "docassemble-lsp.interpreter": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [],
+                    "markdownDescription": "Python interpreter to use for running the server. If empty, uses the Python extension's active environment. Example: `[\"/path/to/python3\"]`."
+                },
+                "docassemble-lsp.showNotifications": {
+                    "type": "string",
+                    "default": "off",
+                    "enum": [
+                        "off",
+                        "onError",
+                        "onWarning",
+                        "always"
+                    ],
+                    "markdownDescription": "Controls when notifications are shown for server errors and warnings."
+                },
+                "docassemble-lsp.trace.server": {
+                    "type": "string",
+                    "default": "off",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "markdownDescription": "Trace level for the language client/server protocol log."
+                },
+                "docassemble-lsp.env": {
+                    "type": "object",
+                    "default": {},
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "description": "Extra environment variables merged into the server process environment."
+                }
+            }
+        },
+        "configurationDefaults": {
+            "[docassemble]": {
+                "editor.defaultFormatter": "jackadamson.vscode-docassemble",
+                "editor.formatOnType": true,
+                "editor.insertSpaces": true,
+                "editor.tabSize": 2
+            }
+        },
+        "languages": [
+            {
+                "id": "docassemble",
+                "aliases": [
+                    "Docassemble YAML",
+                    "docassemble-yaml"
+                ],
+                "extensions": [
+                    ".yml"
+                ],
+                "configuration": "./language-configuration/language-configuration-yaml.json"
+            },
+            {
+                "id": "mako",
+                "aliases": [
+                    "Mako",
+                    "mako"
+                ],
+                "extensions": [],
+                "configuration": "./language-configuration/language-configuration-mako.json"
+            },
+            {
+                "id": "jinja",
+                "aliases": [
+                    "Jinja",
+                    "jinja"
+                ],
+                "extensions": [],
+                "configuration": "./language-configuration/language-configuration-jinja.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "docassemble",
+                "scopeName": "source.docassemble.yaml",
+                "path": "./syntaxes/yaml.tmLanguage.json"
+            },
+            {
+                "language": "jinja",
+                "scopeName": "source.jinja",
+                "path": "./syntaxes/jinja.tmLanguage.json"
+            },
+            {
+                "language": "mako",
+                "scopeName": "source.mako",
+                "path": "./syntaxes/mako.tmLanguage.json"
+            },
+            {
+                "injectTo": [
+                    "source.docassemble.yaml"
+                ],
+                "scopeName": "python.injection",
+                "path": "./syntaxes/python-injection.json"
+            },
+            {
+                "injectTo": [
+                    "source.docassemble.yaml"
+                ],
+                "scopeName": "mako.injection",
+                "path": "./syntaxes/mako-injection.json"
+            },
+            {
+                "injectTo": [
+                    "source.docassemble.yaml"
+                ],
+                "scopeName": "jinja.injection",
+                "path": "./syntaxes/jinja-injection.json"
+            }
+        ]
+    },
+    "icon": "icon.png",
+    "engines": {
+        "vscode": "^1.93.0"
+    },
+    "dependencies": {
+        "@vscode/python-extension": "^1.0.5",
+        "vscode-languageclient": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.15.30",
+        "@types/vscode": "^1.93.0",
+        "@vscode/test-electron": "^3.0.0",
+        "esbuild": "^0.28.0",
+        "typescript": "^5.8.3"
+    },
+    "__metadata": {
+        "id": "517a3d61-d626-45e9-a011-03be13277f9a",
+        "publisherId": "8651b88b-9643-4b29-83d9-b5407b14d9db",
+        "publisherDisplayName": "Jack Adamson",
+        "targetPlatform": "undefined",
+        "updated": false,
+        "isPreReleaseVersion": false,
+        "hasPreReleaseVersion": false,
+        "installedTimestamp": 1707172694885,
+        "pinned": false,
+        "size": 2511695411
+    }
 }
