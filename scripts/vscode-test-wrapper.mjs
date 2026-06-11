@@ -1,11 +1,8 @@
 #!/usr/bin/env node
-// Wrapper around the VS Code macOS ARM64 binary for @vscode/test-electron.
-// VS Code 1.124+ on macOS ARM64 ships a Node.js binary that rejects unknown CLI
-// flags. @vscode/test-electron passes Electron/Chromium flags like --no-sandbox
-// and internal VS Code flags like --extensionTestsPath. Node.js v24+ treats
-// unknown flags as fatal errors. This wrapper spawns a child process via
-// /bin/sh with NODE_OPTIONS to pass the flag through the Node.js parser,
-// bypassing the strict CLI check.
+// Wrapper for the VS Code macOS ARM64 test runner.
+// The Electron binary on macOS ARM64 switches to Node.js mode when
+// ELECTRON_RUN_AS_NODE=1 is set, rejecting Electron/VS Code CLI flags.
+// This wrapper spawns the binary with that variable removed.
 
 import { execFileSync } from "node:child_process";
 
@@ -15,14 +12,13 @@ if (!bin) {
   process.exit(1);
 }
 
+// Copy the environment but omit ELECTRON_RUN_AS_NODE so the binary starts in
+// VS Code / Electron app mode rather than Node.js mode.
+const env = { ...process.env };
+delete env.ELECTRON_RUN_AS_NODE;
+
 try {
-  execFileSync(bin, process.argv.slice(2), {
-    stdio: "inherit",
-    env: {
-      ...process.env,
-      ELECTRON_DISABLE_SANDBOX: "1",
-    },
-  });
+  execFileSync(bin, process.argv.slice(2), { stdio: "inherit", env });
 } catch (e) {
   process.exit(e.status ?? 1);
 }

@@ -31,7 +31,6 @@ type Diagnostic = {
 };
 
 let buffer = Buffer.alloc(0);
-const documents = new Map<string, string>();
 const logPath = process.env.DOCASSEMBLE_MOCK_LOG?.trim();
 
 process.stdin.on("data", (chunk: Buffer) => {
@@ -79,7 +78,7 @@ function handleMessage(message: JsonRpcMessage): void {
           textDocumentSync: 1,
           completionProvider: {},
           documentOnTypeFormattingProvider: {
-            firstTriggerCharacter: "\n",
+            firstTriggerCharacter: "{",
           },
           hoverProvider: true,
         },
@@ -92,7 +91,6 @@ function handleMessage(message: JsonRpcMessage): void {
     const uri = message.params?.textDocument?.uri;
     const text = message.params?.textDocument?.text;
     if (uri && typeof text === "string") {
-      documents.set(uri, text);
       publishDiagnostics(uri, text);
     }
     return;
@@ -102,16 +100,7 @@ function handleMessage(message: JsonRpcMessage): void {
     const uri = message.params?.textDocument?.uri;
     const text = message.params?.contentChanges?.at(-1)?.text;
     if (uri && typeof text === "string") {
-      documents.set(uri, text);
       publishDiagnostics(uri, text);
-    }
-    return;
-  }
-
-  if (message.method === "textDocument/didClose") {
-    const uri = message.params?.textDocument?.uri;
-    if (uri) {
-      documents.delete(uri);
     }
     return;
   }
@@ -120,7 +109,18 @@ function handleMessage(message: JsonRpcMessage): void {
     send({
       jsonrpc: "2.0",
       id: message.id,
-      result: buildOnTypeFormattingEdits(message),
+      result:
+        message.params?.ch === "{"
+          ? [
+              {
+                range: {
+                  start: message.params.position,
+                  end: message.params.position,
+                },
+                newText: "FORMATTED",
+              },
+            ]
+          : [],
     });
     return;
   }
@@ -152,33 +152,6 @@ function send(payload: object): void {
   const body = Buffer.from(JSON.stringify(payload), "utf8");
   process.stdout.write(`Content-Length: ${body.length}\r\n\r\n`);
   process.stdout.write(body);
-}
-
-function buildOnTypeFormattingEdits(message: JsonRpcMessage): object[] {
-  const uri = message.params?.textDocument?.uri;
-  const position = message.params?.position;
-  if (!uri || !position || message.params?.ch !== "\n") {
-    return [];
-  }
-
-  const text = documents.get(uri) ?? "";
-  const lines = text.split(/\r?\n/);
-  const previousLine = lines[position.line - 1]?.trim();
-  const currentLine = lines[position.line] ?? "";
-
-  if (previousLine !== "- label: First" || currentLine.trim().length !== 0) {
-    return [];
-  }
-
-  return [
-    {
-      range: {
-        start: { line: position.line, character: 0 },
-        end: { line: position.line, character: currentLine.length },
-      },
-      newText: "    ",
-    },
-  ];
 }
 
 function publishDiagnostics(uri: string, text: string): void {

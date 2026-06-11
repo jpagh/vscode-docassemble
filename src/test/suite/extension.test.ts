@@ -103,11 +103,6 @@ export async function runTests(): Promise<void> {
           `${quoteForShell(process.execPath)} ${quoteForShell(mockServerPath())}`,
         );
         await updateConfiguration("docassemble-lsp.env", { DOCASSEMBLE_MOCK_LOG: logPath });
-        await updateConfiguration("editor.formatOnType", true);
-        await updateLanguageConfiguration("docassemble", {
-          "editor.defaultFormatter": EXTENSION_ID,
-          "editor.formatOnType": true,
-        });
 
         const api = await getApi();
         await api.restart();
@@ -115,15 +110,21 @@ export async function runTests(): Promise<void> {
 
         const document = await vscode.workspace.openTextDocument({
           language: "docassemble",
-          content: "fields:\n  - label: First",
+          content: "fields: {",
         });
-        const editor = await vscode.window.showTextDocument(document);
-        const end = document.positionAt(document.getText().length);
-        editor.selection = new vscode.Selection(end, end);
+        await vscode.window.showTextDocument(document);
 
-        await vscode.commands.executeCommand("type", { text: "\n" });
+        const position = new vscode.Position(0, 8); // after "{"
+        const edits = await vscode.commands.executeCommand<vscode.TextEdit[]>(
+          "vscode.executeFormatOnTypeProvider",
+          document.uri,
+          position,
+          "{",
+          { insertSpaces: true, tabSize: 2 },
+        );
 
-        await waitFor(() => document.getText() === "fields:\n  - label: First\n    ");
+        assert.ok(edits && edits.length > 0, "Expected format-on-type edits from mock server");
+
         await waitFor(() => readLog(logPath).includes("textDocument/onTypeFormatting"));
       },
     },
@@ -156,18 +157,20 @@ export async function runTests(): Promise<void> {
       },
     },
     {
-      name: "starts with system docassemble-lsp when available",
+      name: "starts with local docassemble-lsp via uv",
       run: async () => {
-        if (
-          process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" ||
-          !commandExists("docassemble-lsp")
-        ) {
+        const lspProject = process.env.DOCASSEMBLE_LSP_PROJECT;
+        if (process.env.DOCASSEMBLE_LSP_ENABLE_REAL_TEST !== "1" || !lspProject) {
           throw new SkipTest();
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "fromEnvironment");
-        await updateConfiguration("docassemble-lsp.command", "docassemble-lsp lsp");
+        await updateConfiguration(
+          "docassemble-lsp.command",
+          `uv run --project ${quoteForShell(lspProject)} docassemble-lsp lsp`,
+        );
 
         const api = await getApi();
         await api.restart();
@@ -184,6 +187,7 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
         await updateConfiguration("docassemble-lsp.interpreter", []);
 
@@ -202,6 +206,7 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
         await updateConfiguration("docassemble-lsp.interpreter", []);
 
@@ -229,6 +234,7 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
         await updateConfiguration("docassemble-lsp.interpreter", []);
 
@@ -261,6 +267,7 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
         await updateConfiguration("docassemble-lsp.interpreter", []);
 
@@ -292,6 +299,7 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
         await updateConfiguration("docassemble-lsp.interpreter", []);
 
@@ -321,6 +329,7 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
         await updateConfiguration("docassemble-lsp.interpreter", []);
 
@@ -355,6 +364,7 @@ export async function runTests(): Promise<void> {
         }
 
         await resetConfiguration();
+        await updateConfiguration("docassemble-lsp.enabled", true);
         await updateConfiguration("docassemble-lsp.importStrategy", "useBundled");
         await updateConfiguration("docassemble-lsp.interpreter", []);
 
@@ -429,20 +439,9 @@ async function updateConfiguration<T>(section: string, value: T): Promise<void> 
 }
 
 async function resetConfiguration(): Promise<void> {
-  // Disable the server first so it stops cleanly, preventing noisy
-  // unhandled-rejection warnings from the language-client when pending
-  // responses are dropped during a config-triggered restart.
+  // Disable the server so a between-test restart doesn't pollute the
+  // extension host state. Tests that need a server explicitly re-enable.
   await updateConfiguration("docassemble-lsp.enabled", false);
-  try {
-    const api = vscode.extensions.getExtension<DocassembleExtensionApi>(EXTENSION_ID)?.exports;
-    if (api) {
-      await waitForState(api, "disabled");
-    }
-  } catch {
-    // If the extension API is unavailable, fall back to a timed wait
-    await sleep(500);
-  }
-  // Clear remaining settings while the server is disabled, then re-enable
   await updateConfiguration("docassemble-lsp.importStrategy", undefined);
   await updateConfiguration("docassemble-lsp.command", undefined);
   await updateConfiguration("docassemble-lsp.interpreter", undefined);
@@ -453,11 +452,6 @@ async function resetConfiguration(): Promise<void> {
   await updateConfiguration("editor.insertSpaces", undefined);
   await updateConfiguration("editor.tabSize", undefined);
   await updateLanguageConfiguration("docassemble", undefined);
-  await updateConfiguration("docassemble-lsp.enabled", undefined);
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function mockServerPath(): string {
